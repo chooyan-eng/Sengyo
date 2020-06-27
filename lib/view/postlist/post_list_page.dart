@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sengyo/view/app_drawer.dart';
 import 'package:sengyo/view/postlist/widget/pickup_list.dart';
+import 'package:sengyo/view/postlist/widget/post_list_item.dart';
 import 'package:sengyo/view/submit/submit_fish_page.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 
@@ -40,6 +41,12 @@ class PostListPage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             PickupList(),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemCount: 10,
+              itemBuilder: (context, index) => PostListItem()
+            ),
           ],
         ),
       ),
