@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sengyo/view/submit/submit_cook_page.dart';
 
-class SubmitCookPage extends StatelessWidget {
+class SubmitCookScene extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-    );
+    return SubmitCookPage();
   }
 }

@@ -5,12 +5,16 @@ class FormActions extends StatelessWidget {
   final VoidCallback onBackTap;
   final VoidCallback onForwardTap;
   final VoidCallback onPauseTap;
+  final String forwardText;
+  final bool isLastForm;
 
   const FormActions({
     Key key,
     this.onBackTap,
     this.onForwardTap,
     this.onPauseTap,
+    this.forwardText,
+    this.isLastForm = false,
   }) : super(key: key);
 
   @override
@@ -62,11 +66,11 @@ class FormActions extends StatelessWidget {
                   height: 48,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    color: AppColors.accent,
+                    color: isLastForm ? AppColors.theme : AppColors.accent,
                   ),
                   child: Center(
                     child: Text(
-                      '捌き方に進む',
+                      forwardText,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

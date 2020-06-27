@@ -3,14 +3,15 @@ import 'package:sengyo/view/submit/submit_cut_scene.dart';
 import 'package:sengyo/view/submit/widget/form_actions.dart';
 import 'package:sengyo/view/submit/widget/multipleline_text_field.dart';
 import 'package:sengyo/view/submit/widget/singleline_text_field.dart';
-import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
 
 class SubmitFishPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text('お魚について'),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,6 +57,7 @@ class SubmitFishPage extends StatelessWidget {
               onBackTap: () => Navigator.pop(context),
               onForwardTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitCutScene())),
               onPauseTap: () {},
+              forwardText: '捌き方に進む',
             ),
           ],
         ),
