@@ -3,6 +3,7 @@ import 'package:sengyo/view/app_drawer.dart';
 import 'package:sengyo/view/postlist/widget/pickup_list.dart';
 import 'package:sengyo/view/postlist/widget/post_list_item.dart';
 import 'package:sengyo/view/submit/submit_fish_page.dart';
+import 'package:sengyo/view/submit/submit_fish_scene.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 
 class PostListPage extends StatelessWidget {
@@ -33,8 +34,9 @@ class PostListPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          return Navigator.of(context).push(MaterialPageRoute(builder: (context) => SubmitFishPage()));
+          return Navigator.of(context).push(MaterialPageRoute(builder: (context) => SubmitFishScene()));
         },
+        child: Icon(Icons.edit),
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
