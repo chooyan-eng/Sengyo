@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sengyo/view/submit/submit_cut_scene.dart';
 import 'package:sengyo/view/submit/widget/form_actions.dart';
 import 'package:sengyo/view/submit/widget/multipleline_text_field.dart';
 import 'package:sengyo/view/submit/widget/singleline_text_field.dart';
@@ -51,7 +52,11 @@ class SubmitFishPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 32),
-            FormActions(),
+            FormActions(
+              onBackTap: () => Navigator.pop(context),
+              onForwardTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitCutScene())),
+              onPauseTap: () {},
+            ),
           ],
         ),
       ),
