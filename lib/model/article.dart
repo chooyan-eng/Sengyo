@@ -12,6 +12,12 @@ class Article {
     'about_cut': cut.firestoreData,
     'about_cook': cook.firestoreData,
   };
+
+  factory Article.fromDocument(DocumentSnapshot document) => Article(
+    ArticleFish.fromMap(document.data['about_fish']),
+    ArticleCut.fromMap(document.data['about_cut']),
+    ArticleCook.fromMap(document.data['about_cook']),
+  );
 }
 
 class ArticleFish {
@@ -26,6 +32,12 @@ class ArticleFish {
     'place': place,
     'memo_list': memoList.map((memo) => memo.firestoreData).toList(),
   };
+
+  factory ArticleFish.fromMap(Map<String, dynamic> map) => ArticleFish(
+    map['fish'],
+    map['place'],
+    map['memo_list'].map((memo) => Memo.fromMap(memo)).toList(),
+  );
 }
 
 class ArticleCut {
@@ -38,6 +50,11 @@ class ArticleCut {
     'caution': caution,
     'memo_list': memoList.map((memo) => memo.firestoreData).toList(),
   };
+
+  factory ArticleCut.fromMap(Map<String, dynamic> map) => ArticleCut(
+    map['caution'],
+    map['memo_list'].map((memo) => Memo.fromMap(memo)).toList(),
+  );
 }
 
 class ArticleCook {
@@ -50,6 +67,11 @@ class ArticleCook {
     'cook': cook,
     'memo_list': memoList.map((memo) => memo.firestoreData).toList(),
   };
+
+  factory ArticleCook.fromMap(Map<String, dynamic> map) => ArticleCook(
+    map['cook'],
+    map['memo_list'].map((memo) => Memo.fromMap(memo)).toList(),
+  );
 }
 
 class Memo {
@@ -62,4 +84,9 @@ class Memo {
     'image': imagePath,
     'memo': memo,
   };
+
+  factory Memo.fromMap(Map<String, dynamic> map) => Memo(
+    map['image'],
+    map['memo'],
+  );
 }

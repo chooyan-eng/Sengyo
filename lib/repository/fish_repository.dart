@@ -5,9 +5,12 @@ class FishRepository {
 
   static const collectionName = 'fishes';
 
-  Future<void> send(Fish fish) async {
-    await Firestore.instance.collection(collectionName).document()
-      .setData(fish.firestoreData);
+  Future<DocumentReference> send(Fish fish, {DocumentReference document}) async {
+    if (document == null) {
+      document = Firestore.instance.collection(collectionName).document();
+    }
+    await document.setData(fish.firestoreData);
+    return document;
   }
 
   Stream<QuerySnapshot> allStream() {

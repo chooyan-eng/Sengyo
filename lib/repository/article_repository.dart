@@ -5,9 +5,13 @@ class ArticleRepository {
 
   static const collectionName = 'articles';
 
-  Future<void> send(Article article) async {
-    await Firestore.instance.collection(collectionName).document()
-      .setData(article.firestoreData);
+  Future<DocumentReference> send(Article article, {DocumentReference document}) async {
+    if (document == null) {
+      document = Firestore.instance.collection(collectionName).document();
+    }
+
+    await document.setData(article.firestoreData);
+    return document;
   }
 
   Stream<QuerySnapshot> allStream() {
