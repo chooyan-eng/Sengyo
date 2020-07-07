@@ -1,22 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Article {
-  final ArticleFish fish;
-  final ArticleCut cut;
-  final ArticleCook cook;
+  ArticleFish fish;
+  ArticleCut cut;
+  ArticleCook cook;
+  var isDraft;
 
-  Article(this.fish, this.cut, this.cook);
+  Article({this.fish, this.cut, this.cook, this.isDraft = true});
 
   Map<String, dynamic> get firestoreData => {
-    'about_fish': fish.firestoreData,
-    'about_cut': cut.firestoreData,
-    'about_cook': cook.firestoreData,
+    'about_fish': fish?.firestoreData ?? ArticleFish.empty().firestoreData,
+    'about_cut': cut?.firestoreData ?? ArticleCut.empty().firestoreData,
+    'about_cook': cook?.firestoreData ?? ArticleCook.empty().firestoreData,
+    'is_draft': isDraft,
   };
 
   factory Article.fromDocument(DocumentSnapshot document) => Article(
-    ArticleFish.fromMap(document.data['about_fish']),
-    ArticleCut.fromMap(document.data['about_cut']),
-    ArticleCook.fromMap(document.data['about_cook']),
+    fish: ArticleFish.fromMap(document.data['about_fish']),
+    cut: ArticleCut.fromMap(document.data['about_cut']),
+    cook: ArticleCook.fromMap(document.data['about_cook']),
+    isDraft: document.data['is_draft'],
   );
 }
 
@@ -38,6 +41,8 @@ class ArticleFish {
     map['place'],
     map['memo_list'].map((memo) => Memo.fromMap(memo)).toList(),
   );
+
+  factory ArticleFish.empty() => ArticleFish(null, '', []);
 }
 
 class ArticleCut {
@@ -55,6 +60,8 @@ class ArticleCut {
     map['caution'],
     map['memo_list'].map((memo) => Memo.fromMap(memo)).toList(),
   );
+
+  factory ArticleCut.empty() => ArticleCut('', []);
 }
 
 class ArticleCook {
@@ -72,6 +79,8 @@ class ArticleCook {
     map['cook'],
     map['memo_list'].map((memo) => Memo.fromMap(memo)).toList(),
   );
+
+  factory ArticleCook.empty() => ArticleCook(null, []);
 }
 
 class Memo {

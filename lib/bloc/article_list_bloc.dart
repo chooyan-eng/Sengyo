@@ -1,16 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sengyo/model/article.dart';
 import 'package:sengyo/repository/article_repository.dart';
 
 class ArticleListBloc extends ChangeNotifier {
   final repository = ArticleRepository();
 
-  final articleList = <Article>[];
+  final articleList = <DocumentSnapshot>[];
 
   void init() {
-    repository.allStream().listen((event) {
+    repository.allPublishedStream().listen((event) {
       articleList.clear();
-      articleList.addAll(event.documents.map((document) => Article.fromDocument(document)));
+      articleList.addAll(event.documents);
       notifyListeners();
     });
   }

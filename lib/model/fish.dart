@@ -16,6 +16,6 @@ class Fish {
   factory Fish.fromDocument(DocumentSnapshot document) => Fish(
     document.data['name'],
     document.data['image'],
-    document.data['synonyms'],
+    document.data['synonyms'].map<String>((synonym) => synonym as String).toList(),
   );
 }
