@@ -39,51 +39,54 @@ class PostListPage extends StatelessWidget {
         child: Icon(Icons.edit),
       ),
       drawer: AppDrawer(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            PickupList(),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      'みんなのお魚メモ',
-                      style: AppTextStyle.label,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.sort, color: AppColors.accent),
-                          const SizedBox(width: 4),
-                          Text(
-                            '新着',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.accent,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ],
+      body: RefreshIndicator(
+        onRefresh: () async {},
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              PickupList(),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        'みんなのお魚メモ',
+                        style: AppTextStyle.label,
                       ),
                     ),
-                  )
-                ],
+                    InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.sort, color: AppColors.accent),
+                            const SizedBox(width: 4),
+                            Text(
+                              '新着',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.accent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemCount: 10,
-              itemBuilder: (context, index) => PostListItem()
-            ),
-          ],
+              ListView.builder(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemCount: 10,
+                itemBuilder: (context, index) => PostListItem()
+              ),
+            ],
+          ),
         ),
       ),
     );
