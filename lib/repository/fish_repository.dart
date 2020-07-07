@@ -1,18 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sengyo/model/article.dart';
+import 'package:sengyo/model/fish.dart';
 
-class ArticleRepository {
+class FishRepository {
 
-  static const collectionName = 'articles';
+  static const collectionName = 'fishes';
 
-  Future<void> send(Article article) async {
+  Future<void> send(Fish fish) async {
     await Firestore.instance.collection(collectionName).document()
-      .setData(article.firestoreData);
+      .setData(fish.firestoreData);
   }
 
   Stream<QuerySnapshot> allStream() {
     return Firestore.instance.collection(collectionName)
-      .orderBy('created_at', descending: true)
       .snapshots();
   }
 }

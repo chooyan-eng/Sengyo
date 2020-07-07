@@ -7,10 +7,10 @@ class Article {
 
   Article(this.fish, this.cut, this.cook);
 
-  Map<String, dynamic> get firebaseData => {
-    'about_fish': fish.firebaseData,
-    'about_cut': cut.firebaseData,
-    'about_cook': cook.firebaseData,
+  Map<String, dynamic> get firestoreData => {
+    'about_fish': fish.firestoreData,
+    'about_cut': cut.firestoreData,
+    'about_cook': cook.firestoreData,
   };
 }
 
@@ -21,10 +21,10 @@ class ArticleFish {
 
   ArticleFish(this.fish, this.place, this.memoList);
 
-  Map<String, dynamic> get firebaseData => {
+  Map<String, dynamic> get firestoreData => {
     'fish': fish,
     'place': place,
-    'memo_list': memoList.map((memo) => memo.firebaseData).toList(),
+    'memo_list': memoList.map((memo) => memo.firestoreData).toList(),
   };
 }
 
@@ -34,9 +34,9 @@ class ArticleCut {
 
   ArticleCut(this.caution, this.memoList);
 
-  Map<String, dynamic> get firebaseData => {
+  Map<String, dynamic> get firestoreData => {
     'caution': caution,
-    'memo_list': memoList.map((memo) => memo.firebaseData).toList(),
+    'memo_list': memoList.map((memo) => memo.firestoreData).toList(),
   };
 }
 
@@ -46,9 +46,9 @@ class ArticleCook {
 
   ArticleCook(this.cook, this.memoList);
 
-  Map<String, dynamic> get firebaseData => {
+  Map<String, dynamic> get firestoreData => {
     'cook': cook,
-    'memo_list': memoList.map((memo) => memo.firebaseData).toList(),
+    'memo_list': memoList.map((memo) => memo.firestoreData).toList(),
   };
 }
 
@@ -58,7 +58,7 @@ class Memo {
 
   Memo(this.imagePath, this.memo);
 
-  Map<String, dynamic> get firebaseData => {
+  Map<String, dynamic> get firestoreData => {
     'image': imagePath,
     'memo': memo,
   };
