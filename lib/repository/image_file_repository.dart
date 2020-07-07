@@ -27,8 +27,8 @@ class ImageFileRepository {
     );
   }
 
-  // TODO: path から ref を生成する
-  // Future<String> getDownloadUrl(String path) async {
-  //   return await ref.getDownloadURL();
-  // }
+  static Future<String> toDownloadUrl(String path) async {
+    final ref = FirebaseStorage.instance.ref().child('images').child('fish').child(path);
+    return await ref.getDownloadURL();
+  }
 }

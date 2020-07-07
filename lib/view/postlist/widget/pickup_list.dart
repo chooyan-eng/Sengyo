@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sengyo/model/fish.dart';
+import 'package:sengyo/repository/image_file_repository.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
 
@@ -29,28 +30,30 @@ class PickupList extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 16),
-              child: Row(
-                children: List.generate(fishList.length, (index) => index)
-                  .expand((element) => [
-                    const SizedBox(width: 16),
-                    InkWell(
-                      onTap: () => onItemTap(element),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.asset(
-                          'assets/images/aodai.jpeg', // TODO: dummy
-                          height: 40,
-                          width: 40,
-                          fit: BoxFit.fill,
-                        ),
+          Container(
+            height: 64,
+            width: double.infinity,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: fishList.length,
+              itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.only(top: 8, bottom: 16, left: 16, right: index == fishList.length - 1 ? 16 : 0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: FutureBuilder<String>(
+                    future: ImageFileRepository.toDownloadUrl(fishList[index].imagePath),
+                    builder: (context, snapshot) => snapshot.hasData ? InkWell(
+                      onTap: () => onItemTap(index),
+                      child: Image.network(
+                        snapshot.data,
+                        height: 40,
+                        width: 40,
+                        fit: BoxFit.fill,
                       ),
-                    ),
-                  ],
-                ).toList(),
+                    ) : Container(height: 40, width: 40, color: AppColors.theme.shade50),
+                  ),
+                ),
               ),
             ),
           ),
