@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sengyo/bloc/fish_list_bloc.dart';
 import 'package:sengyo/view/postlist/post_list_scene.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<FishListBloc>(
+          create: (context) => FishListBloc()..init(),
+        ),
+      ],
+      child: MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {

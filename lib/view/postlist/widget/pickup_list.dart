@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:sengyo/model/fish.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
 
 class PickupList extends StatelessWidget {
+  final List<Fish> fishList;
   final ValueChanged<int> onItemTap;
 
   const PickupList({
     Key key,
+    this.fishList,
     this.onItemTap,
   }) : super(key: key);
 
@@ -31,7 +34,7 @@ class PickupList extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 16),
               child: Row(
-                children: List.generate(10, (index) => index)
+                children: List.generate(fishList.length, (index) => index)
                   .expand((element) => [
                     const SizedBox(width: 16),
                     InkWell(
