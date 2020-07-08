@@ -21,6 +21,19 @@ class Article {
     cook: ArticleCook.fromMap(document.data['about_cook']),
     isDraft: document.data['is_draft'],
   );
+
+  String get firstImagePath {
+    final firstFishImage = fish.memoList.firstWhere((memo) => memo.imagePath?.isNotEmpty ?? false, orElse: () => null);
+    if (firstFishImage != null) return firstFishImage.imagePath;
+
+    final firstCutImage = cut.memoList.firstWhere((memo) => memo.imagePath?.isNotEmpty ?? false, orElse: () => null);
+    if (firstCutImage != null) return firstCutImage.imagePath;
+
+    final firstCookImage = cook.memoList.firstWhere((memo) => memo.imagePath?.isNotEmpty ?? false, orElse: () => null);
+    if (firstCookImage != null) return firstCookImage.imagePath;
+
+    return null;
+  }
 }
 
 class ArticleFish {

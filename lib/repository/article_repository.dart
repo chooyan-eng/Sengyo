@@ -17,7 +17,6 @@ class ArticleRepository {
   Stream<QuerySnapshot> allPublishedStream() {
     return Firestore.instance.collection(collectionName)
       .where('is_draft', isEqualTo: false)
-      .orderBy('created_at', descending: true)
       .snapshots();
   }
 }

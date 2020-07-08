@@ -88,8 +88,8 @@ class PostListPage extends StatelessWidget {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
-                  itemCount: 10,
-                  itemBuilder: (context, index) => PostListItem()
+                  itemCount: postListBloc.articleList.length,
+                  itemBuilder: (context, index) => PostListItem(article: postListBloc.articleList[index])
                 ),
               ],
             ),

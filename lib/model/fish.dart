@@ -18,4 +18,9 @@ class Fish {
     document.data['image'],
     document.data['synonyms'].map<String>((synonym) => synonym as String).toList(),
   );
+
+  static Future<Fish> fromReference(DocumentReference reference) async {
+    final snapshot = await reference.get();
+    return Fish.fromDocument(snapshot);
+  }
 }

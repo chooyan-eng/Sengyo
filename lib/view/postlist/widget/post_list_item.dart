@@ -1,53 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:sengyo/model/article.dart';
+import 'package:sengyo/model/fish.dart';
+import 'package:sengyo/repository/image_file_repository.dart';
+import 'package:sengyo/view/postlist/widget/fish_image.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
 
 class PostListItem extends StatelessWidget {
+
+  final Article article;
+
+  const PostListItem({Key key, this.article}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  'assets/images/aodai.jpeg', // TODO: dummy
-                  height: 40,
-                  width: 40,
-                  fit: BoxFit.fill,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  '真鯛', 
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black87,
+        FutureBuilder<Fish>(
+          future: Fish.fromReference(article.fish.fish),
+          builder: (context, fishSnapshot) => Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                FishImage(data: fishSnapshot.data),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    fishSnapshot.data?.name ?? '', 
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black87,
+                    ),
                   ),
                 ),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: Icon(Icons.more_vert, color: Colors.black54),
+                InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Icon(Icons.more_vert, color: Colors.black54),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-        Container(
-          width: double.infinity,
-          child: Image.asset(
-            'assets/images/aodai.jpeg',
-            fit: BoxFit.fill,
+        article.firstImagePath != null ? FutureBuilder<String>(
+          future: ImageFileRepository.toDownloadUrl(article.firstImagePath),
+          builder: (context, snapshot) => Container(
+            width: double.infinity,
+            height: 200,
+            color: Colors.black12,
+            child: snapshot.hasData ? Image.network(
+              snapshot.data,
+              fit: BoxFit.cover,
+            ) : SizedBox.shrink(),
           ),
-        ),
+        ) : SizedBox.shrink(),
         const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -97,5 +106,10 @@ class PostListItem extends StatelessWidget {
         const Divider(),
       ],
     );
+  }
+
+  Future<String> _getFishImageUrl(ArticleFish fish) async {
+    final snapshot = await fish.fish.get();
+    return await ImageFileRepository.toDownloadUrl(snapshot['image']);
   }
 }
