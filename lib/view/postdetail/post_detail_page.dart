@@ -4,6 +4,8 @@ import 'package:sengyo/bloc/post_detail_bloc.dart';
 import 'package:sengyo/model/cook.dart';
 import 'package:sengyo/model/fish.dart';
 import 'package:sengyo/repository/image_file_repository.dart';
+import 'package:sengyo/view/postdetail/widget/detail_caution.dart';
+import 'package:sengyo/view/postdetail/widget/detail_label.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
 import 'package:sengyo/view/widget/fixed_size_image.dart';
@@ -57,12 +59,9 @@ class PostDetailPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  '食材について',
-                  style: AppTextStyle.label,
-                ),
+              DetailLabel(
+                label: '食材',
+                iconFileName: 'set_meal.png',
               ),
               SizedBox(height: 8),
               Padding(
@@ -109,18 +108,17 @@ class PostDetailPage extends StatelessWidget {
                   ) : SizedBox.shrink(),
                 ),
               ]),
-              SizedBox(height: 32),
-              Divider(),
-              SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  '捌き方について',
-                  style: AppTextStyle.label,
-                ),
+              SizedBox(height: 60),
+              DetailLabel(
+                label: '捌き方',
+                iconFileName: 'handyman.png',
               ),
+              ... postDetailBloc.article.cut.caution?.isNotEmpty ?? false ? [
+                SizedBox(height: 16),
+                DetailCaution(caution: postDetailBloc.article.cut.caution)
+              ] : [],
               ...postDetailBloc.article.cut.memoList.expand((memo) => [
-                SizedBox(height: 8),
+                SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
@@ -140,34 +138,10 @@ class PostDetailPage extends StatelessWidget {
                   ) : SizedBox.shrink(),
                 ),
               ]),
-              SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  '捌く際の注意',
-                  style: AppTextStyle.label,
-                ),
-              ),
-              SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  postDetailBloc.article.cut.caution,
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              SizedBox(height: 32),
-              Divider(),
-              SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  '食べ方',
-                  style: AppTextStyle.label,
-                ),
+              SizedBox(height: 60),
+              DetailLabel(
+                label: '食べ方',
+                iconFileName: 'sports_bar.png',
               ),
               ...postDetailBloc.article.cook.memoList.expand((memo) => [
                 SizedBox(height: 8),
