@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sengyo/bloc/article_list_bloc.dart';
 import 'package:sengyo/bloc/post_list_bloc.dart';
 import 'package:sengyo/view/app_drawer.dart';
+import 'package:sengyo/view/postdetail/post_detail_scene.dart';
 import 'package:sengyo/view/postlist/widget/pickup_list.dart';
 import 'package:sengyo/view/postlist/widget/post_list_item.dart';
 import 'package:sengyo/view/submit/submit_fish_scene.dart';
@@ -104,7 +105,10 @@ class PostListPage extends StatelessWidget {
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
                   itemCount: postListBloc.articleList.length,
-                  itemBuilder: (context, index) => PostListItem(article: postListBloc.articleList[index])
+                  itemBuilder: (context, index) => InkWell(
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PostDetailScene(article: postListBloc.articleList[index]))),
+                    child: PostListItem(article: postListBloc.articleList[index]),
+                  ),
                 ),
               ],
             ),

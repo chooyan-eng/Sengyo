@@ -26,7 +26,6 @@ class FishImage extends StatelessWidget {
       ) : NoFishImage(),
     );
   }
-  
 }
 
 class NoFishImage extends StatelessWidget {

@@ -7,6 +7,7 @@ import 'package:sengyo/repository/image_file_repository.dart';
 import 'package:sengyo/view/postlist/widget/fish_image.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
+import 'package:sengyo/view/widget/fixed_size_image.dart';
 
 class PostListItem extends StatelessWidget {
 
@@ -47,18 +48,7 @@ class PostListItem extends StatelessWidget {
             ),
           ),
         ),
-        article.firstImagePath != null ? FutureBuilder<String>(
-          future: ImageFileRepository.toDownloadUrl(article.firstImagePath),
-          builder: (context, snapshot) => Container(
-            width: double.infinity,
-            height: 200,
-            color: Colors.black12,
-            child: snapshot.hasData ? Image.network(
-              snapshot.data,
-              fit: BoxFit.cover,
-            ) : SizedBox.shrink(),
-          ),
-        ) : SizedBox.shrink(),
+        FixedSizeImage(imagePath: article.firstImagePath),
         const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
