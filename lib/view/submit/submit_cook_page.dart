@@ -26,7 +26,11 @@ class SubmitCookPage extends StatelessWidget {
                   children: <Widget>[
                     Text('食べ方', style: AppTextStyle.label),
                     const SizedBox(height: 8),
-                    SingleLineTextField(isRequired: true, controller: submitCookBloc.nameController),
+                    SingleLineTextField(
+                      isRequired: true,
+                      controller: submitCookBloc.nameController,
+                      hint: '刺身',
+                    ),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -42,7 +46,11 @@ class SubmitCookPage extends StatelessWidget {
                   children: <Widget>[
                     Text('ひとこと', style: AppTextStyle.label),
                     const SizedBox(height: 8),
-                    MultipleLineTextField(isRequired: false, controller: submitCookBloc.memoController),
+                    MultipleLineTextField(
+                      isRequired: false,
+                      controller: submitCookBloc.memoController,
+                      hint: '味や盛り付けはどうでしたか？',
+                    ),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -52,7 +60,8 @@ class SubmitCookPage extends StatelessWidget {
                 onBackTap: () => Navigator.pop(context),
                 onForwardTap: () async {
                   await submitCookBloc.submit();
-                  Navigator.popUntil(context, (route) => !route.navigator.canPop());
+                  Navigator.popUntil(
+                      context, (route) => !route.navigator.canPop());
                 },
                 onPauseTap: () {},
                 forwardText: '投稿する',
@@ -62,6 +71,6 @@ class SubmitCookPage extends StatelessWidget {
           ),
         ),
       ),
-   );
+    );
   }
 }

@@ -24,9 +24,32 @@ class SubmitCutPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('ひとこと', style: AppTextStyle.label),
+                    Text(
+                      '注意すること', 
+                      style: AppTextStyle.label,
+                    ),
                     const SizedBox(height: 8),
-                    MultipleLineTextField(isRequired: false, controller: submitCutBloc.memoController),
+                    MultipleLineTextField(
+                      isRequired: false, 
+                      controller: submitCutBloc.cautionController,
+                      hint: '「トゲが鋭い」「毒がある」「寄生虫が入りやすい」など、捌いて食べる上で注意すべき点',
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('メモ', style: AppTextStyle.label),
+                    const SizedBox(height: 8),
+                    MultipleLineTextField(
+                      isRequired: false, 
+                      controller: submitCutBloc.memoController,
+                      hint: '捌いた時の様子を詳しく教えてください',
+                    ),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -34,18 +57,6 @@ class SubmitCutPage extends StatelessWidget {
               PickupPhoto(
                 onTap: submitCutBloc.pickupImage,
                 data: submitCutBloc.cutImageData,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('注意すること', style: AppTextStyle.label),
-                    const SizedBox(height: 8),
-                    MultipleLineTextField(isRequired: false, controller: submitCutBloc.cautionController),
-                    const SizedBox(height: 16),
-                  ],
-                ),
               ),
               const SizedBox(height: 32),
               FormActions(

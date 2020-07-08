@@ -13,7 +13,7 @@ class SubmitFishPage extends StatelessWidget {
     return Consumer<SubmitFishBloc>(
       builder: (context, submitFishBloc, child) => Scaffold(
         appBar: AppBar(
-          title: Text('お魚について'),
+          title: Text('食材について'),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -24,13 +24,32 @@ class SubmitFishPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('お魚の名前', style: AppTextStyle.label),
+                    Text('食材の名前', style: AppTextStyle.label),
                     const SizedBox(height: 8),
-                    SingleLineTextField(isRequired: true, controller: submitFishBloc.nameController),
+                    SingleLineTextField(
+                      isRequired: true,
+                      controller: submitFishBloc.nameController,
+                      hint: 'マダイ',
+                    ),
                     const SizedBox(height: 16),
                     Text('手に入れた場所', style: AppTextStyle.label),
                     const SizedBox(height: 8),
-                    SingleLineTextField(isRequired: true, controller: submitFishBloc.placeController),
+                    SingleLineTextField(
+                      isRequired: true,
+                      controller: submitFishBloc.placeController,
+                      hint: '近所のスーパーで',
+                    ),
+                    const SizedBox(height: 4),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '手に入れました',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -41,9 +60,18 @@ class SubmitFishPage extends StatelessWidget {
                   width: double.infinity,
                   height: 200,
                   color: Colors.black12,
-                  child: submitFishBloc.fishImageData == null ? Center(
-                    child: Icon(Icons.add_a_photo, color: Colors.black54, size: 54,)
-                  ) : Image.memory(submitFishBloc.fishImageData, fit: BoxFit.cover),
+                  child: submitFishBloc.fishImageData == null
+                      ? Center(
+                          child: Icon(
+                            Icons.add_a_photo,
+                            color: Colors.black54,
+                            size: 54,
+                          ),
+                        )
+                      : Image.memory(
+                          submitFishBloc.fishImageData,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
               Padding(
@@ -51,9 +79,13 @@ class SubmitFishPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('ひとこと', style: AppTextStyle.label),
+                    Text('メモ', style: AppTextStyle.label),
                     const SizedBox(height: 8),
-                    MultipleLineTextField(isRequired: false, controller: submitFishBloc.memoController),
+                    MultipleLineTextField(
+                      isRequired: false,
+                      controller: submitFishBloc.memoController,
+                      hint: 'この食材について詳しく教えてください',
+                    ),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -63,7 +95,12 @@ class SubmitFishPage extends StatelessWidget {
                 onBackTap: () => Navigator.pop(context),
                 onForwardTap: () async {
                   final document = await submitFishBloc.submit();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitCutScene(document: document)));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SubmitCutScene(document: document),
+                    ),
+                  );
                 },
                 onPauseTap: () {},
                 forwardText: '捌き方に進む',

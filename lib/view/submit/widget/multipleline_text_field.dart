@@ -4,11 +4,13 @@ import 'package:sengyo/view/widget/app_colors.dart';
 class MultipleLineTextField extends StatelessWidget {
   final bool isRequired;
   final TextEditingController controller;
+  final String hint;
 
   const MultipleLineTextField({
     Key key,
     this.isRequired,
     this.controller,
+    this.hint,
   }) : super(key: key);
 
   @override
@@ -18,6 +20,7 @@ class MultipleLineTextField extends StatelessWidget {
       maxLines: 5,
       minLines: 5,
       decoration: InputDecoration(
+        hintText: hint,
         fillColor: AppColors.accent.shade50,
         filled: isRequired,
         border: OutlineInputBorder(
