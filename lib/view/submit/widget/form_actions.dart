@@ -66,7 +66,7 @@ class FormActions extends StatelessWidget {
                   height: 48,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    color: isLastForm ? AppColors.theme : AppColors.accent,
+                    color: onForwardTap == null ? Colors.black12 : isLastForm ? AppColors.theme : AppColors.accent,
                   ),
                   child: Center(
                     child: Text(

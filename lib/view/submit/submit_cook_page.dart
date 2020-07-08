@@ -30,6 +30,7 @@ class SubmitCookPage extends StatelessWidget {
                       isRequired: true,
                       controller: submitCookBloc.nameController,
                       hint: '刺身',
+                      onChanged: (value) => submitCookBloc.callNotifyListeners(),
                     ),
                     const SizedBox(height: 16),
                   ],
@@ -58,11 +59,11 @@ class SubmitCookPage extends StatelessWidget {
               const SizedBox(height: 32),
               FormActions(
                 onBackTap: () => Navigator.pop(context),
-                onForwardTap: () async {
+                onForwardTap: submitCookBloc.isSubmittable ? () async {
                   await submitCookBloc.submit();
                   Navigator.popUntil(
                       context, (route) => !route.navigator.canPop());
-                },
+                } : null,
                 onPauseTap: () {},
                 forwardText: '投稿する',
                 isLastForm: true,

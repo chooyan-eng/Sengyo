@@ -24,7 +24,10 @@ class SubmitFishBloc extends ChangeNotifier{
   var placeController = TextEditingController();
   var memoController = TextEditingController();
   List<int> fishImageData;
-  bool _isProcessingImage;
+  bool _isProcessingImage = false;
+  bool get isSubmittable => !_isProcessingImage
+                              && nameController.text.isNotEmpty
+                              && placeController.text.isNotEmpty;
 
   void updateFishList(List<DocumentSnapshot> documents) {
     _fishList.clear();
@@ -103,6 +106,8 @@ class SubmitFishBloc extends ChangeNotifier{
 
     return await articleRepository.send(article);
   }
+
+  void callNotifyListeners() => notifyListeners();
 
   @override
   void dispose() {

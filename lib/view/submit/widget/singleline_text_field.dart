@@ -5,18 +5,21 @@ class SingleLineTextField extends StatelessWidget {
   final bool isRequired;
   final TextEditingController controller;
   final String hint;
+  final ValueChanged onChanged;
 
   const SingleLineTextField({
     Key key,
     this.isRequired,
     this.controller,
     this.hint,
+    this.onChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: TextField(
+        onChanged: onChanged,
         controller: controller,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

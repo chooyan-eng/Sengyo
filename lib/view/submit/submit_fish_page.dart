@@ -30,6 +30,7 @@ class SubmitFishPage extends StatelessWidget {
                       isRequired: true,
                       controller: submitFishBloc.nameController,
                       hint: 'マダイ',
+                      onChanged: (value) => submitFishBloc.callNotifyListeners(),
                     ),
                     const SizedBox(height: 16),
                     Text('手に入れた場所', style: AppTextStyle.label),
@@ -38,6 +39,7 @@ class SubmitFishPage extends StatelessWidget {
                       isRequired: true,
                       controller: submitFishBloc.placeController,
                       hint: '近所のスーパーで',
+                      onChanged: (value) => submitFishBloc.callNotifyListeners(),
                     ),
                     const SizedBox(height: 4),
                     Align(
@@ -93,7 +95,7 @@ class SubmitFishPage extends StatelessWidget {
               const SizedBox(height: 32),
               FormActions(
                 onBackTap: () => Navigator.pop(context),
-                onForwardTap: () async {
+                onForwardTap: submitFishBloc.isSubmittable ? () async {
                   final document = await submitFishBloc.submit();
                   Navigator.push(
                     context,
@@ -101,7 +103,7 @@ class SubmitFishPage extends StatelessWidget {
                       builder: (context) => SubmitCutScene(document: document),
                     ),
                   );
-                },
+                } : null,
                 onPauseTap: () {},
                 forwardText: '捌き方に進む',
               ),

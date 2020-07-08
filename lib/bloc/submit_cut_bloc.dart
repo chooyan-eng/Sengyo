@@ -18,7 +18,7 @@ class SubmitCutBloc extends ChangeNotifier{
   var cautionController = TextEditingController();
   var memoController = TextEditingController();
   List<int> cutImageData;
-  bool _isProcessingImage;
+  bool _isProcessingImage = false;
   bool get isSubmittable => _document != null && !_isProcessingImage;
 
   DocumentReference get document => _document;
@@ -74,6 +74,8 @@ class SubmitCutBloc extends ChangeNotifier{
 
     return await articleRepository.send(article, document: _document);
   }
+
+  void callNotifyListeners() => notifyListeners();
 
   @override
   void dispose() {

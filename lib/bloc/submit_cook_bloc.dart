@@ -23,8 +23,10 @@ class SubmitCookBloc extends ChangeNotifier{
   var nameController = TextEditingController();
   var memoController = TextEditingController();
   List<int> cookImageData;
-  bool _isProcessingImage;
-  bool get isSubmittable => _document != null && !_isProcessingImage;
+  bool _isProcessingImage = false;
+  bool get isSubmittable => _document != null 
+                              && !_isProcessingImage
+                              && nameController.text.isNotEmpty;
 
   void updateCookList(List<DocumentSnapshot> documents) {
     _cookList.clear();
@@ -102,6 +104,8 @@ class SubmitCookBloc extends ChangeNotifier{
 
     return await articleRepository.send(article, document: document);
   }
+
+  void callNotifyListeners() => notifyListeners();
 
   @override
   void dispose() {
