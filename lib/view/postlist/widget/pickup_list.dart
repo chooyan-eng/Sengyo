@@ -25,7 +25,7 @@ class PickupList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 16, left: 16),
             child: Text(
-              '注目のお魚',
+              '最近投稿があった食材',
               style: AppTextStyle.label,
             ),
           ),

@@ -74,30 +74,30 @@ class PostListPage extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: Text(
-                          'みんなのお魚メモ',
+                          'みんなの捌いたメモ',
                           style: AppTextStyle.label,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.sort, color: AppColors.accent),
-                              const SizedBox(width: 4),
-                              Text(
-                                '新着',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: AppColors.accent,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
+                      // InkWell(
+                      //   onTap: () {},
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(4.0),
+                      //     child: Row(
+                      //       children: <Widget>[
+                      //         Icon(Icons.sort, color: AppColors.accent),
+                      //         const SizedBox(width: 4),
+                      //         Text(
+                      //           '新着',
+                      //           style: TextStyle(
+                      //             fontSize: 16,
+                      //             color: AppColors.accent,
+                      //             fontWeight: FontWeight.bold,
+                      //           ),
+                      //         )
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -110,6 +110,9 @@ class PostListPage extends StatelessWidget {
                     child: PostListItem(article: postListBloc.articleList[index]),
                   ),
                 ),
+                postListBloc.articleList.isEmpty ? Center(
+                  child: Text('投稿がありません'),
+                ) : SizedBox(),
               ],
             ),
           ),
