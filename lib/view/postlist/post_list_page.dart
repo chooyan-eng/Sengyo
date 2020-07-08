@@ -18,6 +18,11 @@ class PostListPage extends StatelessWidget {
           title: Container(
             height: 44,
             child: TextField(
+              onChanged: (value) {
+                if (value.isEmpty) {
+                  Provider.of<ArticleListBloc>(context, listen: false).all();
+                }
+              },
               controller: postListBloc.filterController,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
