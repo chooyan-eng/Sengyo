@@ -5,14 +5,16 @@ class Article {
   ArticleCut cut;
   ArticleCook cook;
   var isDraft;
+  Timestamp createdAt;
 
-  Article({this.fish, this.cut, this.cook, this.isDraft = true});
+  Article({this.fish, this.cut, this.cook, this.isDraft = true, this.createdAt});
 
   Map<String, dynamic> get firestoreData => {
     'about_fish': fish?.firestoreData ?? ArticleFish.empty().firestoreData,
     'about_cut': cut?.firestoreData ?? ArticleCut.empty().firestoreData,
     'about_cook': cook?.firestoreData ?? ArticleCook.empty().firestoreData,
     'is_draft': isDraft,
+    'created_at': createdAt,
   };
 
   factory Article.fromDocument(DocumentSnapshot document) => Article(
@@ -20,6 +22,7 @@ class Article {
     cut: ArticleCut.fromMap(document.data['about_cut']),
     cook: ArticleCook.fromMap(document.data['about_cook']),
     isDraft: document.data['is_draft'],
+    createdAt: document.data['created_at'],
   );
 
   String get firstImagePath {
@@ -31,6 +34,19 @@ class Article {
 
     final firstCookImage = cook.memoList.firstWhere((memo) => memo.imagePath?.isNotEmpty ?? false, orElse: () => null);
     if (firstCookImage != null) return firstCookImage.imagePath;
+
+    return null;
+  }
+
+  String get firstMemo {
+    final firstFishMemo = fish.memoList.firstWhere((memo) => memo.memo?.isNotEmpty ?? false, orElse: () => null);
+    if (firstFishMemo != null) return firstFishMemo.memo;
+
+    final firstCutMemo = cut.memoList.firstWhere((memo) => memo.memo?.isNotEmpty ?? false, orElse: () => null);
+    if (firstCutMemo != null) return firstCutMemo.memo;
+
+    final firstCookMemo = cook.memoList.firstWhere((memo) => memo.memo?.isNotEmpty ?? false, orElse: () => null);
+    if (firstCookMemo != null) return firstCookMemo.memo;
 
     return null;
   }

@@ -98,6 +98,7 @@ class SubmitCookBloc extends ChangeNotifier{
       ],
     );
     article.isDraft = false;
+    article.createdAt = Timestamp.now();
 
     return await articleRepository.send(article, document: document);
   }

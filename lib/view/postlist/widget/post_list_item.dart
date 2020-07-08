@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sengyo/model/article.dart';
+import 'package:sengyo/model/cook.dart';
 import 'package:sengyo/model/fish.dart';
 import 'package:sengyo/repository/image_file_repository.dart';
 import 'package:sengyo/view/postlist/widget/fish_image.dart';
@@ -64,7 +66,7 @@ class PostListItem extends StatelessWidget {
             alignment: WrapAlignment.start,
             spacing: 8,
             runSpacing: 4,
-            children: ['刺身', '煮付け', '唐揚げ'].map((e) => Container(
+            children: [article.cook.cook].map((cookReference) => Container(
               height: 28,
               decoration: BoxDecoration(
                 color: AppColors.theme,
@@ -73,9 +75,12 @@ class PostListItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                 child: Center(
-                  child: Text(
-                    e, 
-                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  child: FutureBuilder<Cook>(
+                    future: Cook.fromReference(cookReference),
+                    builder: (context, snapshot) => Text(
+                      snapshot.hasData ? snapshot.data.name : '',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
                   ), 
                   widthFactor: 1,
                 ),
@@ -87,7 +92,7 @@ class PostListItem extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            'ここにコメント　ここにコメント　ここにコメント　ここにコメント　ここにコメント　ここにコメント　ここにコメント　ここにコメント　',
+            article.firstMemo ?? '',
             style: AppTextStyle.body,
           ),
         ),
@@ -97,7 +102,7 @@ class PostListItem extends StatelessWidget {
           child: Align(
             alignment: Alignment.centerRight,
             child: Text(
-              '2020.08.10',
+              DateTime.fromMillisecondsSinceEpoch(article.createdAt.millisecondsSinceEpoch).toString(),
               style: TextStyle(fontSize: 16, color: Colors.black54),
             ),
           ),
