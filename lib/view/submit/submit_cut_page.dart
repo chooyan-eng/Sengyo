@@ -62,12 +62,13 @@ class SubmitCutPage extends StatelessWidget {
               const SizedBox(height: 32),
               FormActions(
                 onBackTap: () => Navigator.pop(context),
-                onForwardTap: submitCutBloc.isSubmittable ? () async {
+                onForwardTap: submitCutBloc.isSubmittable && !submitCutBloc.isSubmitting ? () async {
                   final document = await submitCutBloc.submit();
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitCookScene(document: document)));
                 } : null,
                 onPauseTap: () {},
                 forwardText: '食べ方に進む',
+                isSubmitting: submitCutBloc.isSubmitting,
               ),
             ],
           ),

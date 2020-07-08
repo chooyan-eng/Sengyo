@@ -60,7 +60,7 @@ class SubmitCookPage extends StatelessWidget {
               const SizedBox(height: 32),
               FormActions(
                 onBackTap: () => Navigator.pop(context),
-                onForwardTap: submitCookBloc.isSubmittable ? () async {
+                onForwardTap: submitCookBloc.isSubmittable && !submitCookBloc.isSubmitting ? () async {
                   await submitCookBloc.submit();
                   Navigator.popUntil(
                       context, (route) => !route.navigator.canPop());
@@ -68,6 +68,7 @@ class SubmitCookPage extends StatelessWidget {
                 onPauseTap: () {},
                 forwardText: '投稿する',
                 isLastForm: true,
+                isSubmitting: submitCookBloc.isSubmitting,
               ),
             ],
           ),

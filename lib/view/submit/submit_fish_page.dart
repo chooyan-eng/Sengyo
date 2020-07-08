@@ -81,8 +81,9 @@ class SubmitFishPage extends StatelessWidget {
               const SizedBox(height: 32),
               FormActions(
                 onBackTap: () => Navigator.pop(context),
-                onForwardTap: submitFishBloc.isSubmittable ? () async {
+                onForwardTap: submitFishBloc.isSubmittable && !submitFishBloc.isSubmitting ? () async {
                   final document = await submitFishBloc.submit();
+                  submitFishBloc.document = document;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -92,6 +93,7 @@ class SubmitFishPage extends StatelessWidget {
                 } : null,
                 onPauseTap: () {},
                 forwardText: '捌き方に進む',
+                isSubmitting: submitFishBloc.isSubmitting,
               ),
             ],
           ),

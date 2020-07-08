@@ -25,6 +25,7 @@ class SubmitFishBloc extends ChangeNotifier{
   var memoController = TextEditingController();
   List<int> fishImageData;
   bool _isProcessingImage = false;
+  bool _isSubmitting = false;
   bool get isSubmittable => !_isProcessingImage
                               && nameController.text.isNotEmpty
                               && placeController.text.isNotEmpty;
@@ -46,6 +47,12 @@ class SubmitFishBloc extends ChangeNotifier{
     notifyListeners();
   }
   
+  bool get isSubmitting => _isSubmitting;
+  set isSubmitting(bool value) {
+    _isSubmitting = value;
+    notifyListeners();
+  }
+
   Future<void> pickupImage() async {
     final imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
 
@@ -67,7 +74,8 @@ class SubmitFishBloc extends ChangeNotifier{
   }
 
   Future<DocumentReference> submit() async {
-
+    isSubmitting = true;
+    
     String imagePath;
     if (fishImageData?.isNotEmpty ?? false) {
       final onComplete = await imageRepository.uploadFishImage(fishImageData).onComplete;
@@ -104,7 +112,9 @@ class SubmitFishBloc extends ChangeNotifier{
       isDraft: true,
     );
 
-    return await articleRepository.send(article);
+    final reference =  await articleRepository.send(article, document: document);
+    isSubmitting = false;
+    return reference; 
   }
 
   void callNotifyListeners() => notifyListeners();

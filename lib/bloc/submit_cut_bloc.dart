@@ -19,6 +19,7 @@ class SubmitCutBloc extends ChangeNotifier{
   var memoController = TextEditingController();
   List<int> cutImageData;
   bool _isProcessingImage = false;
+  bool _isSubmitting = false;
   bool get isSubmittable => _document != null && !_isProcessingImage;
 
   DocumentReference get document => _document;
@@ -33,6 +34,12 @@ class SubmitCutBloc extends ChangeNotifier{
     notifyListeners();
   }
   
+  bool get isSubmitting => _isSubmitting;
+  set isSubmitting(bool value) {
+    _isSubmitting = value;
+    notifyListeners();
+  }
+
   Future<void> pickupImage() async {
     final imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
 
@@ -54,6 +61,7 @@ class SubmitCutBloc extends ChangeNotifier{
   }
 
   Future<DocumentReference> submit() async {
+    isSubmitting = true;
     final article = Article.fromDocument(await _document.get());
 
     String imagePath;
@@ -72,7 +80,9 @@ class SubmitCutBloc extends ChangeNotifier{
       ],
     );
 
-    return await articleRepository.send(article, document: _document);
+    final reference = await articleRepository.send(article, document: _document);
+    isSubmitting = false;
+    return reference; 
   }
 
   void callNotifyListeners() => notifyListeners();

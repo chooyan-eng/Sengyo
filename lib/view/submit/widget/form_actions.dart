@@ -7,6 +7,7 @@ class FormActions extends StatelessWidget {
   final VoidCallback onPauseTap;
   final String forwardText;
   final bool isLastForm;
+  final bool isSubmitting;
 
   const FormActions({
     Key key,
@@ -15,6 +16,7 @@ class FormActions extends StatelessWidget {
     this.onPauseTap,
     this.forwardText,
     this.isLastForm = false,
+    this.isSubmitting = false,
   }) : super(key: key);
 
   @override
@@ -69,7 +71,9 @@ class FormActions extends StatelessWidget {
                     color: onForwardTap == null ? Colors.black12 : isLastForm ? AppColors.theme : AppColors.accent,
                   ),
                   child: Center(
-                    child: Text(
+                    child: isSubmitting ? CircularProgressIndicator(
+                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
+                    ) : Text(
                       forwardText,
                       style: TextStyle(
                         fontSize: 16,

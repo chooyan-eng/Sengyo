@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sengyo/repository/image_file_repository.dart';
+import 'package:sengyo/view/widget/app_colors.dart';
 
 class FixedSizeImage extends StatelessWidget {
 
@@ -11,9 +12,9 @@ class FixedSizeImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return imagePath != null ? Stack(
+    return Stack(
       children: <Widget>[
-        FutureBuilder<String>(
+        imagePath != null ? FutureBuilder<String>(
           future: ImageFileRepository.toDownloadUrl(imagePath),
           builder: (context, snapshot) => Container(
             width: double.infinity,
@@ -23,6 +24,19 @@ class FixedSizeImage extends StatelessWidget {
               snapshot.data,
               fit: BoxFit.cover,
             ) : SizedBox.shrink(),
+          ),
+        ) : Container(
+          width: double.infinity,
+          height: 200,
+          color: Colors.black12,
+          child: Center(
+            child: Text(
+              'No Image',
+              style: TextStyle(
+                fontSize: 32,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         withMask ? Container(
@@ -38,6 +52,6 @@ class FixedSizeImage extends StatelessWidget {
           child: child,
         ) : SizedBox.shrink(),
       ],
-    ) : SizedBox.shrink();
+    );
   }
 }

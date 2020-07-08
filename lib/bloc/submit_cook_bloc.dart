@@ -24,6 +24,7 @@ class SubmitCookBloc extends ChangeNotifier{
   var memoController = TextEditingController();
   List<int> cookImageData;
   bool _isProcessingImage = false;
+  bool _isSubmitting = false;
   bool get isSubmittable => _document != null 
                               && !_isProcessingImage
                               && nameController.text.isNotEmpty;
@@ -45,6 +46,12 @@ class SubmitCookBloc extends ChangeNotifier{
     notifyListeners();
   }
   
+  bool get isSubmitting => _isSubmitting;
+  set isSubmitting(bool value) {
+    _isSubmitting = value;
+    notifyListeners();
+  }
+
   Future<void> pickupImage() async {
     final imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
 
@@ -66,6 +73,8 @@ class SubmitCookBloc extends ChangeNotifier{
   }
 
   Future<DocumentReference> submit() async {
+    isSubmitting = true;
+
     final article = Article.fromDocument(await _document.get());
 
     String imagePath;
@@ -102,7 +111,9 @@ class SubmitCookBloc extends ChangeNotifier{
     article.isDraft = false;
     article.createdAt = Timestamp.now();
 
-    return await articleRepository.send(article, document: document);
+    final reference = await articleRepository.send(article, document: document);
+    isSubmitting = false;
+    return reference;
   }
 
   void callNotifyListeners() => notifyListeners();
