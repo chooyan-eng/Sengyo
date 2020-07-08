@@ -15,6 +15,7 @@ class Article {
     'about_cook': cook?.firestoreData ?? ArticleCook.empty().firestoreData,
     'is_draft': isDraft,
     'created_at': createdAt,
+    'fish': fish?.fish,
   };
 
   factory Article.fromDocument(DocumentSnapshot document) => Article(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sengyo/bloc/article_list_bloc.dart';
+import 'package:sengyo/bloc/fish_list_bloc.dart';
 import 'package:sengyo/bloc/post_list_bloc.dart';
 import 'package:sengyo/view/app_drawer.dart';
 import 'package:sengyo/view/postlist/widget/pickup_list.dart';
@@ -17,6 +19,7 @@ class PostListPage extends StatelessWidget {
           title: Container(
             height: 44,
             child: TextField(
+              controller: postListBloc.filterController,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                 fillColor: Colors.white,
@@ -28,7 +31,12 @@ class PostListPage extends StatelessWidget {
                   ),
                 ),
                 suffixIcon: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    final fishReference = postListBloc.findFishReference(postListBloc.filterKeyword);
+                    if (fishReference != null) {
+                      Provider.of<ArticleListBloc>(context, listen: false).filterByFish(fishReference);
+                    }
+                  },
                   child: Icon(Icons.search),
                 ),
               ),
@@ -50,7 +58,12 @@ class PostListPage extends StatelessWidget {
               children: <Widget>[
                 PickupList(
                   fishList: postListBloc.fishList,
-                  onItemTap: (index) {},
+                  onItemTap: (fish) {
+                    final fishReference = postListBloc.findFishReference(fish.name);
+                    if (fishReference != null) {
+                      Provider.of<ArticleListBloc>(context, listen: false).filterByFish(fishReference);
+                    }
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16),

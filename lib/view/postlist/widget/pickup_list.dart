@@ -6,7 +6,7 @@ import 'package:sengyo/view/widget/app_text_style.dart';
 
 class PickupList extends StatelessWidget {
   final List<Fish> fishList;
-  final ValueChanged<int> onItemTap;
+  final ValueChanged<Fish> onItemTap;
 
   const PickupList({
     Key key,
@@ -44,7 +44,7 @@ class PickupList extends StatelessWidget {
                   child: FutureBuilder<String>(
                     future: ImageFileRepository.toDownloadUrl(fishList[index].imagePath),
                     builder: (context, snapshot) => snapshot.hasData ? InkWell(
-                      onTap: () => onItemTap(index),
+                      onTap: () => onItemTap(fishList[index]),
                       child: Image.network(
                         snapshot.data,
                         height: 40,

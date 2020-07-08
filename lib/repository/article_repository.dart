@@ -19,4 +19,11 @@ class ArticleRepository {
       .where('is_draft', isEqualTo: false)
       .snapshots();
   }
+
+  Stream<QuerySnapshot> filterByFishStream(DocumentReference fish) {
+    return Firestore.instance.collection(collectionName)
+      .where('is_draft', isEqualTo: false)
+      .where('fish', isEqualTo: fish)
+      .snapshots();
+  }
 }
