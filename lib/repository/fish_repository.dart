@@ -17,4 +17,10 @@ class FishRepository {
     return Firestore.instance.collection(collectionName)
       .snapshots();
   }
+
+  Stream<QuerySnapshot> withImageStream() {
+    return Firestore.instance.collection(collectionName)
+      .where('image', isGreaterThanOrEqualTo: '') // where image not null
+      .snapshots();
+  }
 }

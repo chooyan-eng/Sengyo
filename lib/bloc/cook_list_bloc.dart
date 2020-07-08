@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:sengyo/repository/fish_repository.dart';
+import 'package:sengyo/repository/cook_repository.dart';
 
-class FishListBloc extends ChangeNotifier {
-  final repository = FishRepository();
+class CookListBloc extends ChangeNotifier {
+  final repository = CookRepository();
 
   final fishDocumentList = <DocumentSnapshot>[];
 
   void init() {
-    repository.withImageStream().listen((event) {
+    repository.allStream().listen((event) {
       fishDocumentList.clear();
       fishDocumentList.addAll(event.documents);
       notifyListeners();

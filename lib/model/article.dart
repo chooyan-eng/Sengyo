@@ -84,18 +84,18 @@ class ArticleCook {
 }
 
 class Memo {
-  final String imagePath;
   final String memo;
+  final String imagePath;
 
-  Memo(this.imagePath, this.memo);
+  Memo(this.memo, this.imagePath);
 
   Map<String, dynamic> get firestoreData => {
-    'image': imagePath,
     'memo': memo,
+    'image': imagePath,
   };
 
   factory Memo.fromMap(Map<String, dynamic> map) => Memo(
-    map['image'],
     map['memo'],
+    map['image'],
   );
 }

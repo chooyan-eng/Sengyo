@@ -1,63 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sengyo/bloc/submit_cook_bloc.dart';
 import 'package:sengyo/view/submit/widget/form_actions.dart';
 import 'package:sengyo/view/submit/widget/multipleline_text_field.dart';
+import 'package:sengyo/view/submit/widget/pickup_photo.dart';
 import 'package:sengyo/view/submit/widget/singleline_text_field.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
 
 class SubmitCookPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
-      appBar: AppBar(
-        title: Text('食べ方について'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('食べ方', style: AppTextStyle.label),
-                  const SizedBox(height: 8),
-                  SingleLineTextField(isRequired: true),
-                  const SizedBox(height: 16),
-                ],
+    return Consumer<SubmitCookBloc>(
+      builder: (context, submitCookBloc, child) => Scaffold(
+        appBar: AppBar(
+          title: Text('食べ方について'),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('食べ方', style: AppTextStyle.label),
+                    const SizedBox(height: 8),
+                    SingleLineTextField(isRequired: true, controller: submitCookBloc.nameController),
+                    const SizedBox(height: 16),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 200,
-              color: Colors.black12,
-              child: Center(
-                child: Icon(Icons.add_a_photo, color: Colors.black54, size: 54,)
+              PickupPhoto(
+                onTap: submitCookBloc.pickupImage,
+                data: submitCookBloc.cookImageData,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text('ひとこと', style: AppTextStyle.label),
-                  const SizedBox(height: 8),
-                  MultipleLineTextField(isRequired: false),
-                  const SizedBox(height: 16),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('ひとこと', style: AppTextStyle.label),
+                    const SizedBox(height: 8),
+                    MultipleLineTextField(isRequired: false, controller: submitCookBloc.memoController),
+                    const SizedBox(height: 16),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 32),
-            FormActions(
-              onBackTap: () => Navigator.pop(context),
-              onForwardTap: () {},
-              onPauseTap: () {},
-              forwardText: '投稿する',
-              isLastForm: true,
-            ),
-          ],
+              const SizedBox(height: 32),
+              FormActions(
+                onBackTap: () => Navigator.pop(context),
+                onForwardTap: () async {
+                  await submitCookBloc.submit();
+                  Navigator.popUntil(context, (route) => !route.navigator.canPop());
+                },
+                onPauseTap: () {},
+                forwardText: '投稿する',
+                isLastForm: true,
+              ),
+            ],
+          ),
         ),
       ),
-    );
+   );
   }
 }
