@@ -6,6 +6,7 @@ import 'package:sengyo/view/submit/widget/form_actions.dart';
 import 'package:sengyo/view/submit/widget/multipleline_text_field.dart';
 import 'package:sengyo/view/submit/widget/pickup_photo.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
+import 'package:toast/toast.dart';
 
 class SubmitCutPage extends StatelessWidget {
   @override
@@ -65,6 +66,7 @@ class SubmitCutPage extends StatelessWidget {
                 onForwardTap: submitCutBloc.isSubmittable && !submitCutBloc.isSubmitting ? () async {
                   final document = await submitCutBloc.submit();
                   Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitCookScene(document: document)));
+                  Toast.show('「捌き方について」を保存しました', context, duration: Toast.LENGTH_LONG);
                 } : null,
                 onPauseTap: () {},
                 forwardText: '食べ方に進む',

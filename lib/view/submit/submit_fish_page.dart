@@ -7,6 +7,7 @@ import 'package:sengyo/view/submit/widget/multipleline_text_field.dart';
 import 'package:sengyo/view/submit/widget/pickup_photo.dart';
 import 'package:sengyo/view/submit/widget/singleline_text_field.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
+import 'package:toast/toast.dart';
 
 class SubmitFishPage extends StatelessWidget {
   @override
@@ -90,6 +91,7 @@ class SubmitFishPage extends StatelessWidget {
                       builder: (context) => SubmitCutScene(document: document),
                     ),
                   );
+                  Toast.show('「食材について」を保存しました', context, duration: Toast.LENGTH_LONG);
                 } : null,
                 onPauseTap: () {},
                 forwardText: '捌き方に進む',
