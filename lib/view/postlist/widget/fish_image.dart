@@ -11,9 +11,9 @@ class FishImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return data != null ? ClipRRect(
+    return ClipRRect(
       borderRadius: BorderRadius.circular(20),
-      child: FutureBuilder<String>(
+      child: data != null ? FutureBuilder<String>(
         future: ImageFileRepository.toDownloadUrl(data.imagePath),
         builder: (context, snapshot) => snapshot.hasData ? InkWell(
           child: Image.network(
@@ -23,8 +23,8 @@ class FishImage extends StatelessWidget {
             fit: BoxFit.fill,
           ),
         ) : NoFishImage(),
-      ),
-    ) : NoFishImage();
+      ) : NoFishImage(),
+    );
   }
   
 }

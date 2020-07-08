@@ -21,6 +21,11 @@ class PostListPage extends StatelessWidget {
               onChanged: (value) {
                 if (value.isEmpty) {
                   Provider.of<ArticleListBloc>(context, listen: false).all();
+                } else {
+                  final fishReference = postListBloc.findFishReference(postListBloc.filterKeyword);
+                  if (fishReference != null) {
+                    Provider.of<ArticleListBloc>(context, listen: false).filterByFish(fishReference);
+                  }
                 }
               },
               controller: postListBloc.filterController,
@@ -34,19 +39,7 @@ class PostListPage extends StatelessWidget {
                     color: AppColors.theme,
                   ),
                 ),
-                suffixIcon: InkWell(
-                  onTap: () {
-                    if (postListBloc.filterKeyword.isEmpty) {
-                      Provider.of<ArticleListBloc>(context, listen: false).all();
-                    } else {
-                      final fishReference = postListBloc.findFishReference(postListBloc.filterKeyword);
-                      if (fishReference != null) {
-                        Provider.of<ArticleListBloc>(context, listen: false).filterByFish(fishReference);
-                      }
-                    }
-                  },
-                  child: Icon(Icons.search),
-                ),
+                suffixIcon: Icon(Icons.search),
               ),
             ),
           ),
