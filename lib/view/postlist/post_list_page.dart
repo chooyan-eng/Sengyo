@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sengyo/bloc/article_list_bloc.dart';
-import 'package:sengyo/bloc/fish_list_bloc.dart';
 import 'package:sengyo/bloc/post_list_bloc.dart';
 import 'package:sengyo/view/app_drawer.dart';
 import 'package:sengyo/view/postlist/widget/pickup_list.dart';
@@ -32,9 +31,13 @@ class PostListPage extends StatelessWidget {
                 ),
                 suffixIcon: InkWell(
                   onTap: () {
-                    final fishReference = postListBloc.findFishReference(postListBloc.filterKeyword);
-                    if (fishReference != null) {
-                      Provider.of<ArticleListBloc>(context, listen: false).filterByFish(fishReference);
+                    if (postListBloc.filterKeyword.isEmpty) {
+                      Provider.of<ArticleListBloc>(context, listen: false).all();
+                    } else {
+                      final fishReference = postListBloc.findFishReference(postListBloc.filterKeyword);
+                      if (fishReference != null) {
+                        Provider.of<ArticleListBloc>(context, listen: false).filterByFish(fishReference);
+                      }
                     }
                   },
                   child: Icon(Icons.search),
@@ -59,6 +62,7 @@ class PostListPage extends StatelessWidget {
                 PickupList(
                   fishList: postListBloc.fishList,
                   onItemTap: (fish) {
+                    postListBloc.filterController.text = fish.name;
                     final fishReference = postListBloc.findFishReference(fish.name);
                     if (fishReference != null) {
                       Provider.of<ArticleListBloc>(context, listen: false).filterByFish(fishReference);

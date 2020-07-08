@@ -10,7 +10,7 @@ class ArticleListBloc extends ChangeNotifier {
   final articleList = <DocumentSnapshot>[];
   StreamSubscription _subscription;
 
-  void init() {
+  void all() {
     _listenStream(repository.allPublishedStream());
   }
 

@@ -28,7 +28,7 @@ class PostListBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  DocumentReference findFishReference(String name) {
+  DocumentReference findFishReference(String name) {    
     final snapshot = _fishDocumentList.firstWhere((snapshot) {
       return Fish.fromDocument(snapshot).synonyms.contains(name);
     }, orElse: () => null);

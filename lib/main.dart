@@ -18,7 +18,7 @@ void main() {
           create: (context) => CookListBloc()..init(),
         ),
         ChangeNotifierProvider<ArticleListBloc>(
-          create: (context) => ArticleListBloc()..init(),
+          create: (context) => ArticleListBloc()..all(),
         ),
       ],
       child: MyApp(),
