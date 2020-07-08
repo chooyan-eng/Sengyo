@@ -52,7 +52,7 @@ class SubmitFishBloc extends ChangeNotifier{
     if (imageFile == null) {
       return;
     }
-
+    fishImageData = null;
     isProcessingImage = true;
 
     ImageCrop.sampleImage(

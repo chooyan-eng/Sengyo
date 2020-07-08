@@ -39,6 +39,7 @@ class SubmitCookPage extends StatelessWidget {
               PickupPhoto(
                 onTap: submitCookBloc.pickupImage,
                 data: submitCookBloc.cookImageData,
+                isProcessing: submitCookBloc.isProcessingImage,
               ),
               Padding(
                 padding: const EdgeInsets.all(16),

@@ -57,6 +57,7 @@ class SubmitCutPage extends StatelessWidget {
               PickupPhoto(
                 onTap: submitCutBloc.pickupImage,
                 data: submitCutBloc.cutImageData,
+                isProcessing: submitCutBloc.isProcessingImage,
               ),
               const SizedBox(height: 32),
               FormActions(

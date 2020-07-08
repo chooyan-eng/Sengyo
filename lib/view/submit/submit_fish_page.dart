@@ -4,6 +4,7 @@ import 'package:sengyo/bloc/submit_fish_bloc.dart';
 import 'package:sengyo/view/submit/submit_cut_scene.dart';
 import 'package:sengyo/view/submit/widget/form_actions.dart';
 import 'package:sengyo/view/submit/widget/multipleline_text_field.dart';
+import 'package:sengyo/view/submit/widget/pickup_photo.dart';
 import 'package:sengyo/view/submit/widget/singleline_text_field.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
 
@@ -56,25 +57,10 @@ class SubmitFishPage extends StatelessWidget {
                   ],
                 ),
               ),
-              InkWell(
+              PickupPhoto(
                 onTap: submitFishBloc.pickupImage,
-                child: Container(
-                  width: double.infinity,
-                  height: 200,
-                  color: Colors.black12,
-                  child: submitFishBloc.fishImageData == null
-                      ? Center(
-                          child: Icon(
-                            Icons.add_a_photo,
-                            color: Colors.black54,
-                            size: 54,
-                          ),
-                        )
-                      : Image.memory(
-                          submitFishBloc.fishImageData,
-                          fit: BoxFit.cover,
-                        ),
-                ),
+                data: submitFishBloc.fishImageData,
+                isProcessing: submitFishBloc.isProcessingImage,
               ),
               Padding(
                 padding: const EdgeInsets.all(16),
