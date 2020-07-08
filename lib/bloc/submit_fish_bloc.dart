@@ -45,6 +45,11 @@ class SubmitFishBloc extends ChangeNotifier{
   
   Future<void> pickupImage() async {
     final imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
+
+    if (imageFile == null) {
+      return;
+    }
+
     isProcessingImage = true;
 
     ImageCrop.sampleImage(
@@ -59,16 +64,26 @@ class SubmitFishBloc extends ChangeNotifier{
   }
 
   Future<DocumentReference> submit() async {
-    final onComplete = await imageRepository.uploadFishImage(fishImageData).onComplete;
-    final imagePath = await onComplete.ref.getPath();
+
+    String imagePath;
+    if (fishImageData?.isNotEmpty ?? false) {
+      final onComplete = await imageRepository.uploadFishImage(fishImageData).onComplete;
+      imagePath = await onComplete.ref.getPath();
+    }
 
     var fish = _fishList.firstWhere((element) {
       return element.data['synonyms'].contains(nameController.text);
     }, orElse: () => null)?.reference;
-    
-    if (fish == null) {
+
+    final fishSnapshot = await fish?.get();
+    if (fishSnapshot == null) {
       fish = await fishRepository.send(
         Fish(nameController.text, imagePath, [nameController.text]),
+      );
+    } else if (fishSnapshot.data['image'] == null) {
+      fish = await fishRepository.send(
+        Fish(nameController.text, imagePath, [nameController.text]),
+        document: fish,
       );
     }
 

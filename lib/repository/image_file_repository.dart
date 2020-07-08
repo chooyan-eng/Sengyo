@@ -28,7 +28,7 @@ class ImageFileRepository {
   }
 
   static Future<String> toDownloadUrl(String path) async {
-    final ref = FirebaseStorage.instance.ref().child('images').child('fish').child(path);
+    final ref = FirebaseStorage.instance.ref().child(path);
     return await ref.getDownloadURL();
   }
 }

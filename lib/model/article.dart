@@ -39,7 +39,7 @@ class ArticleFish {
   factory ArticleFish.fromMap(Map<String, dynamic> map) => ArticleFish(
     map['fish'],
     map['place'],
-    map['memo_list'].map((memo) => Memo.fromMap(memo)).toList(),
+    map['memo_list'].map<Memo>((memo) => Memo.fromMap(memo)).toList(),
   );
 
   factory ArticleFish.empty() => ArticleFish(null, '', []);
@@ -58,7 +58,7 @@ class ArticleCut {
 
   factory ArticleCut.fromMap(Map<String, dynamic> map) => ArticleCut(
     map['caution'],
-    map['memo_list'].map((memo) => Memo.fromMap(memo)).toList(),
+    map['memo_list'].map<Memo>((memo) => Memo.fromMap(memo)).toList(),
   );
 
   factory ArticleCut.empty() => ArticleCut('', []);
@@ -77,7 +77,7 @@ class ArticleCook {
 
   factory ArticleCook.fromMap(Map<String, dynamic> map) => ArticleCook(
     map['cook'],
-    map['memo_list'].map((memo) => Memo.fromMap(memo)).toList(),
+    map['memo_list'].map<Memo>((memo) => Memo.fromMap(memo)).toList(),
   );
 
   factory ArticleCook.empty() => ArticleCook(null, []);

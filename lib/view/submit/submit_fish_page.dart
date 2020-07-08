@@ -63,7 +63,7 @@ class SubmitFishPage extends StatelessWidget {
                 onBackTap: () => Navigator.pop(context),
                 onForwardTap: () async {
                   final document = await submitFishBloc.submit();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitCutScene()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitCutScene(document: document)));
                 },
                 onPauseTap: () {},
                 forwardText: '捌き方に進む',
