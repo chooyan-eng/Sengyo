@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sengyo/bloc/fish_list_bloc.dart';
 import 'package:sengyo/view/postlist/post_list_scene.dart';
+import 'package:sengyo/view/splash_page.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 
 import 'bloc/article_list_bloc.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: AppColors.theme,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: PostListScene(),
+      home: SplashPage(),
     );
   }
 }
