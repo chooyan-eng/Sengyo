@@ -86,17 +86,17 @@ class FormActions extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          InkWell(
-            onTap: onPauseTap,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 36, vertical: 8),
-              child: Text(
-                '保存して中断',
-                style: TextStyle(fontSize: 16, color: AppColors.theme),
-              ),
-            ),
-          ),
+          // const SizedBox(height: 16),
+          // InkWell(
+          //   onTap: onPauseTap,
+          //   child: Padding(
+          //     padding: EdgeInsets.symmetric(horizontal: 36, vertical: 8),
+          //     child: Text(
+          //       '保存して中断',
+          //       style: TextStyle(fontSize: 16, color: AppColors.theme),
+          //     ),
+          //   ),
+          // ),
           const SizedBox(height: 60),
         ],
       ),
