@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sengyo/bloc/post_detail_bloc.dart';
+import 'package:sengyo/model/article.dart';
 import 'package:sengyo/model/cook.dart';
 import 'package:sengyo/model/fish.dart';
 import 'package:sengyo/repository/image_file_repository.dart';
+import 'package:sengyo/repository/report_repository.dart';
 import 'package:sengyo/view/postdetail/widget/detail_caution.dart';
 import 'package:sengyo/view/postdetail/widget/detail_label.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
-import 'package:sengyo/view/widget/app_text_style.dart';
 import 'package:sengyo/view/widget/fixed_size_image.dart';
+import 'package:sengyo/view/widget/post_action_sheet.dart';
+import 'package:sengyo/view/widget/report_dialog.dart';
+import 'package:toast/toast.dart';
 
 class PostDetailPage extends StatelessWidget {
   @override
@@ -19,6 +23,15 @@ class PostDetailPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,
+          actions: <Widget>[
+            InkWell(
+              onTap: () => _showMenuSheet(context, postDetailBloc.article),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Icon(Icons.more_vert),
+              ),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -168,6 +181,40 @@ class PostDetailPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+  
+  _showMenuSheet(BuildContext context, Article article) {
+    showModalBottomSheet(
+      context: context,
+      builder: (c) => PostActionSheet(
+        article: article,
+        muteLabel: 'この投稿をミュートする',
+        onMuteTap: (value) {
+          Navigator.pop(context);
+          Navigator.pop<bool>(context, true);
+        },
+        onReportTap: (value) {
+          Navigator.pop(context);
+          _showReportDialog(context, article);
+        },
+        onCancel: () => Navigator.pop(context),
+      ),
+    );
+  }
+
+  _showReportDialog(BuildContext context, Article article) {
+    showDialog(
+      context: context,
+      builder: (c) => ReportDialog(
+        article: article,
+        onReport: (message) async {
+          await ReportRepository().send(article, message);
+          Toast.show('問題を報告しました', context, duration: Toast.LENGTH_SHORT);
+          Navigator.pop(context);
+        },
+        onCancel: () => Navigator.pop(context),
       ),
     );
   }
