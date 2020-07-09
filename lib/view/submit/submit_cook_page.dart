@@ -16,62 +16,68 @@ class SubmitCookPage extends StatelessWidget {
         appBar: AppBar(
           title: Text('食べ方について'),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('食べ方', style: AppTextStyle.label),
-                    const SizedBox(height: 8),
-                    SingleLineTextField(
-                      isRequired: true,
-                      controller: submitCookBloc.nameController,
-                      hint: '刺身',
-                      onChanged: (value) => submitCookBloc.callNotifyListeners(),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onPanDown: (_) {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('食べ方', style: AppTextStyle.label),
+                      const SizedBox(height: 8),
+                      SingleLineTextField(
+                        isRequired: true,
+                        controller: submitCookBloc.nameController,
+                        hint: '刺身',
+                        onChanged: (value) => submitCookBloc.callNotifyListeners(),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
                 ),
-              ),
-              PickupPhoto(
-                onTap: submitCookBloc.pickupImage,
-                data: submitCookBloc.cookImageData,
-                isProcessing: submitCookBloc.isProcessingImage,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('ひとこと', style: AppTextStyle.label),
-                    const SizedBox(height: 8),
-                    MultipleLineTextField(
-                      isRequired: false,
-                      controller: submitCookBloc.memoController,
-                      hint: '味や盛り付けはどうでしたか？',
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+                PickupPhoto(
+                  onTap: submitCookBloc.pickupImage,
+                  data: submitCookBloc.cookImageData,
+                  isProcessing: submitCookBloc.isProcessingImage,
                 ),
-              ),
-              const SizedBox(height: 32),
-              FormActions(
-                onBackTap: () => Navigator.pop(context),
-                onForwardTap: submitCookBloc.isSubmittable && !submitCookBloc.isSubmitting ? () async {
-                  await submitCookBloc.submit();
-                  Navigator.popUntil(context, (route) => !route.navigator.canPop());
-                  Toast.show('投稿が完了しました', context, duration: Toast.LENGTH_LONG);
-                } : null,
-                onPauseTap: () {},
-                forwardText: '投稿して公開する',
-                isLastForm: true,
-                isSubmitting: submitCookBloc.isSubmitting,
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('ひとこと', style: AppTextStyle.label),
+                      const SizedBox(height: 8),
+                      MultipleLineTextField(
+                        isRequired: false,
+                        controller: submitCookBloc.memoController,
+                        hint: '味や盛り付けはどうでしたか？',
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 32),
+                FormActions(
+                  onBackTap: () => Navigator.pop(context),
+                  onForwardTap: submitCookBloc.isSubmittable && !submitCookBloc.isSubmitting ? () async {
+                    await submitCookBloc.submit();
+                    Navigator.popUntil(context, (route) => !route.navigator.canPop());
+                    Toast.show('投稿が完了しました', context, duration: Toast.LENGTH_LONG);
+                  } : null,
+                  onPauseTap: () {},
+                  forwardText: '投稿して公開する',
+                  isLastForm: true,
+                  isSubmitting: submitCookBloc.isSubmitting,
+                ),
+              ],
+            ),
           ),
         ),
       ),

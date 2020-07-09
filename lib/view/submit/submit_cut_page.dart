@@ -16,63 +16,69 @@ class SubmitCutPage extends StatelessWidget {
         appBar: AppBar(
           title: Text('捌き方について'),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '注意すること', 
-                      style: AppTextStyle.label,
-                    ),
-                    const SizedBox(height: 8),
-                    MultipleLineTextField(
-                      isRequired: false, 
-                      controller: submitCutBloc.cautionController,
-                      hint: '「トゲが鋭い」「毒がある」「寄生虫が入りやすい」など、捌いて食べる上で注意すべき点',
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onPanDown: (_) {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '注意すること', 
+                        style: AppTextStyle.label,
+                      ),
+                      const SizedBox(height: 8),
+                      MultipleLineTextField(
+                        isRequired: false, 
+                        controller: submitCutBloc.cautionController,
+                        hint: '「トゲが鋭い」「毒がある」「寄生虫が入りやすい」など、捌いて食べる上で注意すべき点',
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('メモ', style: AppTextStyle.label),
-                    const SizedBox(height: 8),
-                    MultipleLineTextField(
-                      isRequired: false, 
-                      controller: submitCutBloc.memoController,
-                      hint: '捌いた時の様子を詳しく教えてください',
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('メモ', style: AppTextStyle.label),
+                      const SizedBox(height: 8),
+                      MultipleLineTextField(
+                        isRequired: false, 
+                        controller: submitCutBloc.memoController,
+                        hint: '捌いた時の様子を詳しく教えてください',
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
                 ),
-              ),
-              PickupPhoto(
-                onTap: submitCutBloc.pickupImage,
-                data: submitCutBloc.cutImageData,
-                isProcessing: submitCutBloc.isProcessingImage,
-              ),
-              const SizedBox(height: 32),
-              FormActions(
-                onBackTap: () => Navigator.pop(context),
-                onForwardTap: submitCutBloc.isSubmittable && !submitCutBloc.isSubmitting ? () async {
-                  final document = await submitCutBloc.submit();
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitCookScene(document: document)));
-                  Toast.show('「捌き方について」を保存しました', context, duration: Toast.LENGTH_LONG);
-                } : null,
-                onPauseTap: () {},
-                forwardText: '食べ方に進む',
-                isSubmitting: submitCutBloc.isSubmitting,
-              ),
-            ],
+                PickupPhoto(
+                  onTap: submitCutBloc.pickupImage,
+                  data: submitCutBloc.cutImageData,
+                  isProcessing: submitCutBloc.isProcessingImage,
+                ),
+                const SizedBox(height: 32),
+                FormActions(
+                  onBackTap: () => Navigator.pop(context),
+                  onForwardTap: submitCutBloc.isSubmittable && !submitCutBloc.isSubmitting ? () async {
+                    final document = await submitCutBloc.submit();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitCookScene(document: document)));
+                    Toast.show('「捌き方について」を保存しました', context, duration: Toast.LENGTH_LONG);
+                  } : null,
+                  onPauseTap: () {},
+                  forwardText: '食べ方に進む',
+                  isSubmitting: submitCutBloc.isSubmitting,
+                ),
+              ],
+            ),
           ),
         ),
       ),
