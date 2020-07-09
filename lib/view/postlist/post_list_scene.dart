@@ -14,7 +14,7 @@ class PostListScene extends StatelessWidget {
         postListBloc.updateArticleList(articleListBloc.articleList);
         return postListBloc;
       },
-      create: (context) => PostListBloc(),
+      create: (context) => PostListBloc()..reloadMuteList(),
       child: PostListPage(),
     );
   }

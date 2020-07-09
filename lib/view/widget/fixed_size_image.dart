@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sengyo/repository/image_file_repository.dart';
-import 'package:sengyo/view/widget/app_colors.dart';
 
 class FixedSizeImage extends StatelessWidget {
 

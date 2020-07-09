@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Article {
+  String id;
   ArticleFish fish;
   ArticleCut cut;
   ArticleCook cook;
   var isDraft;
   Timestamp createdAt;
 
-  Article({this.fish, this.cut, this.cook, this.isDraft = true, this.createdAt});
+  Article({this.id, this.fish, this.cut, this.cook, this.isDraft = true, this.createdAt});
 
   Map<String, dynamic> get firestoreData => {
     'about_fish': fish?.firestoreData ?? ArticleFish.empty().firestoreData,
@@ -19,6 +20,7 @@ class Article {
   };
 
   factory Article.fromDocument(DocumentSnapshot document) => Article(
+    id: document.documentID,
     fish: ArticleFish.fromMap(document.data['about_fish']),
     cut: ArticleCut.fromMap(document.data['about_cut']),
     cook: ArticleCook.fromMap(document.data['about_cook']),

@@ -37,7 +37,8 @@ dependencies:
   image: ^2.1.12
   crypto: ^2.1.4
   toast: ^0.1.5
-
+  shared_preferences: ^0.5.8
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
