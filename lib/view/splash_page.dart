@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sengyo/bloc/login_bloc.dart';
 import 'package:sengyo/view/postlist/post_list_scene.dart';
 
 class SplashPage extends StatefulWidget {
@@ -27,14 +29,13 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void initState() {
-    Future.delayed(
-      Duration(milliseconds: 1000), 
-      () async {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PostListScene()));
-      },
-    );
-
+    _checkSignin();
     super.initState();
+  }
+
+  Future<void> _checkSignin() async {
+    await Provider.of<LoginBloc>(context, listen: false).init();
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PostListScene()));
   }
 
   @override

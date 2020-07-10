@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sengyo/bloc/article_list_bloc.dart';
+import 'package:sengyo/bloc/login_bloc.dart';
 import 'package:sengyo/bloc/post_list_bloc.dart';
 import 'package:sengyo/model/article.dart';
 import 'package:sengyo/repository/report_repository.dart';
 import 'package:sengyo/view/app_drawer.dart';
+import 'package:sengyo/view/login/login_scene.dart';
 import 'package:sengyo/view/postdetail/post_detail_scene.dart';
 import 'package:sengyo/view/postlist/widget/pickup_list.dart';
 import 'package:sengyo/view/postlist/widget/post_list_item.dart';
@@ -55,10 +57,14 @@ class PostListPage extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            return Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => SubmitFishScene()));
+            if (Provider.of<LoginBloc>(context, listen: false).isLogin) {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => SubmitFishScene()));
+            } else {
+              _showLoginDialog(context);
+            }
           },
           child: Icon(Icons.edit),
+          backgroundColor: Provider.of<LoginBloc>(context, listen: false).isLogin ? AppColors.theme : Colors.grey,
         ),
         drawer: AppDrawer(),
         body: RefreshIndicator(
@@ -196,6 +202,57 @@ class PostListPage extends StatelessWidget {
           Navigator.pop(context);
         },
         onCancel: () => Navigator.pop(context),
+      ),
+    );
+  }
+
+  _showLoginDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (c) => AlertDialog(
+        titlePadding: const EdgeInsets.all(0),
+        title: Container(
+          color: AppColors.theme,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'ログインしてください',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text('捌いたメモの投稿にはアカウントへのログインが必要です。'),
+            const SizedBox(height: 16),
+            Text('ログインしますか？'),
+            const SizedBox(height: 32),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: Text('キャンセル'),
+                ),
+                const SizedBox(width: 16),
+                InkWell(
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScene())),
+                  child: Text(
+                    'ログイン',
+                    style: TextStyle(
+                      color: AppColors.theme,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

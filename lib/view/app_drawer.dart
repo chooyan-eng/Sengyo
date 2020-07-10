@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:provider/provider.dart';
+import 'package:sengyo/bloc/login_bloc.dart';
+import 'package:sengyo/view/login/login_scene.dart';
+import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:toast/toast.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -12,12 +16,10 @@ class AppDrawer extends StatefulWidget {
 class _AppDrawerState extends State<AppDrawer> {
 
   PackageInfo _packageInfo;
-  bool _isSignin = false;
   
   @override
   void initState() {
     initPackageInfo();
-    initLoginState();
     super.initState();
   }
 
@@ -28,13 +30,6 @@ class _AppDrawerState extends State<AppDrawer> {
     });
   }
 
-  Future<void> initLoginState() async {
-    final user = await FirebaseAuth.instance.currentUser();
-    setState(() {
-      _isSignin = user != null;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -42,27 +37,90 @@ class _AppDrawerState extends State<AppDrawer> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 80),
+            Container(
+              height: 200,
+              color: AppColors.theme,
+              padding: const EdgeInsets.all(16.0),
+              child: context.watch<LoginBloc>().isLogin ? Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 16),
+                  Text(
+                    'ログイン中',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  InkWell(
+                    onTap: () async {
+                      Provider.of<LoginBloc>(context, listen: false).signout();
+                      Toast.show('ログアウトしました', context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'ログアウト',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ): Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 16),
+                  Text(
+                    'ログインして投稿しよう',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScene()));
+                    },
+                    child: Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        height: 40,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'ログイン',
+                            style: TextStyle(
+                              color: AppColors.theme,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             _buildItem(Icons.person, 'プライバシーポリシー', () {}),
             _buildItem(Icons.description, '利用規約', () {}),
             _buildItem(Icons.speaker_notes, 'ライセンス', () => showLicensePage(context: context)),
             _buildItem(Icons.question_answer, 'お問い合わせ', () {}),
-            InkWell(
-              onTap: () async {
-                if (_isSignin) {
-                  await FirebaseAuth.instance.signOut();
-                  await initLoginState();
-                } else {
-                  Toast.show('ログインします。', context);
-                }
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(8),
-                child: Text(_isSignin ? 'ログアウト' : 'ログイン'),
-              ),
-            ),
-            const SizedBox(height: 40),
             Divider(),
             const SizedBox(height: 16),
             _packageInfo == null ? SizedBox.shrink() : Center(
@@ -83,7 +141,7 @@ class _AppDrawerState extends State<AppDrawer> {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
         child: Row(
           children: <Widget>[
             Icon(
@@ -91,11 +149,11 @@ class _AppDrawerState extends State<AppDrawer> {
               color: Colors.black54,
               size: 24,
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 16),
             Text(
               label,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 color: Colors.black54,
               ),
             )
