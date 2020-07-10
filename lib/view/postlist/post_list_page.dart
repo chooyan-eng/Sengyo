@@ -64,7 +64,7 @@ class PostListPage extends StatelessWidget {
             }
           },
           child: Icon(Icons.edit),
-          backgroundColor: Provider.of<LoginBloc>(context, listen: false).isLogin ? AppColors.theme : Colors.grey,
+          backgroundColor: context.watch<LoginBloc>().isLogin ? AppColors.theme : Colors.grey,
         ),
         drawer: AppDrawer(),
         body: RefreshIndicator(
@@ -240,7 +240,10 @@ class PostListPage extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 InkWell(
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScene())),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScene()));
+                  },
                   child: Text(
                     'ログイン',
                     style: TextStyle(

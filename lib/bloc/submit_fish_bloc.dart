@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +18,7 @@ class SubmitFishBloc extends ChangeNotifier{
   final fishRepository = FishRepository();
   final imageRepository = ImageFileRepository();
 
+  String authorId;
   final _fishList = <DocumentSnapshot>[];
 
   DocumentReference _document;
@@ -110,6 +112,7 @@ class SubmitFishBloc extends ChangeNotifier{
         ],
       ),
       isDraft: true,
+      authorId: authorId,
     );
 
     final reference =  await articleRepository.send(article, document: document);

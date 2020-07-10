@@ -98,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       });
 
                       Toast.show('ログイン用メールを送信しました。', context);
+                      Navigator.pop(context);
                     },
                     padding: const EdgeInsets.all(0.0),
                     shape: RoundedRectangleBorder(
