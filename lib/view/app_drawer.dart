@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
+import 'package:toast/toast.dart';
 
 class AppDrawer extends StatefulWidget {
 
@@ -10,10 +12,12 @@ class AppDrawer extends StatefulWidget {
 class _AppDrawerState extends State<AppDrawer> {
 
   PackageInfo _packageInfo;
+  bool _isSignin = false;
   
   @override
   void initState() {
     initPackageInfo();
+    initLoginState();
     super.initState();
   }
 
@@ -21,6 +25,13 @@ class _AppDrawerState extends State<AppDrawer> {
     final packageInfo = await PackageInfo.fromPlatform();
     setState(() {
       _packageInfo = packageInfo;        
+    });
+  }
+
+  Future<void> initLoginState() async {
+    final user = await FirebaseAuth.instance.currentUser();
+    setState(() {
+      _isSignin = user != null;
     });
   }
 
@@ -36,6 +47,21 @@ class _AppDrawerState extends State<AppDrawer> {
             _buildItem(Icons.description, '利用規約', () {}),
             _buildItem(Icons.speaker_notes, 'ライセンス', () => showLicensePage(context: context)),
             _buildItem(Icons.question_answer, 'お問い合わせ', () {}),
+            InkWell(
+              onTap: () async {
+                if (_isSignin) {
+                  await FirebaseAuth.instance.signOut();
+                  await initLoginState();
+                } else {
+                  Toast.show('ログインします。', context);
+                }
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(8),
+                child: Text(_isSignin ? 'ログアウト' : 'ログイン'),
+              ),
+            ),
             const SizedBox(height: 40),
             Divider(),
             const SizedBox(height: 16),
