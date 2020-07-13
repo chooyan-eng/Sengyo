@@ -51,7 +51,7 @@ class SubmitCutBloc extends ChangeNotifier{
 
     ImageCrop.sampleImage(
       file: File(imageFile.path),
-      preferredSize: 1024,
+      preferredSize: 512,
     ).then((sampleFile) {
       cutImageData = image.encodePng(image.decodeImage(sampleFile.readAsBytesSync()));
       

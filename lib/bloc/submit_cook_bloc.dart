@@ -63,7 +63,7 @@ class SubmitCookBloc extends ChangeNotifier{
 
     ImageCrop.sampleImage(
       file: File(imageFile.path),
-      preferredSize: 1024,
+      preferredSize: 512,
     ).then((sampleFile) {
       cookImageData = image.encodePng(image.decodeImage(sampleFile.readAsBytesSync()));
       
