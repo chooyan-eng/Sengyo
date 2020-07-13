@@ -37,6 +37,7 @@ dependencies:
   shared_preferences: ^0.5.8
   package_info: ^0.4.1
   flutter_secure_storage: ^3.3.3
+  url_launcher: ^5.5.0
   
   # firebase
   firebase_core: ^0.4.5

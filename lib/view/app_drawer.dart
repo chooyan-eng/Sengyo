@@ -6,6 +6,7 @@ import 'package:sengyo/bloc/login_bloc.dart';
 import 'package:sengyo/view/login/login_scene.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppDrawer extends StatefulWidget {
 
@@ -117,10 +118,31 @@ class _AppDrawerState extends State<AppDrawer> {
                 ],
               ),
             ),
-            _buildItem(Icons.person, 'プライバシーポリシー', () {}),
-            _buildItem(Icons.description, '利用規約', () {}),
+            _buildItem(Icons.person, 'プライバシーポリシー', () async {
+              final url = 'https://chooyan-eng.github.io/SengyoStaticPages/privacy.html';
+              if (await canLaunch(url)) {
+                await launch(
+                  url,
+                  forceSafariVC: false,
+                  forceWebView: false,
+                );
+              } else {
+                throw 'Could not launch $url';
+              }
+            }),
+            _buildItem(Icons.description, '利用規約', () async {
+              final url = 'https://chooyan-eng.github.io/SengyoStaticPages/terms.html';
+              if (await canLaunch(url)) {
+                await launch(
+                  url,
+                  forceSafariVC: false,
+                  forceWebView: false,
+                );
+              } else {
+                throw 'Could not launch $url';
+              }
+            }),
             _buildItem(Icons.speaker_notes, 'ライセンス', () => showLicensePage(context: context)),
-            _buildItem(Icons.question_answer, 'お問い合わせ', () {}),
             Divider(),
             const SizedBox(height: 16),
             _packageInfo == null ? SizedBox.shrink() : Center(
