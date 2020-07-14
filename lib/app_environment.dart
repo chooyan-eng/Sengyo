@@ -1,3 +1,3 @@
 class AppEnvironment {
-  static const firebaseUrl = 'https://sengyodev.firebaseapp.com/';
+  static const firebaseUrl = 'https://sengyoproduct.firebaseapp.com/';
 }
