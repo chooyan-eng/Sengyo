@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sengyo/bloc/article_list_bloc.dart';
 import 'package:sengyo/bloc/login_bloc.dart';
 import 'package:sengyo/bloc/post_list_bloc.dart';
+import 'package:sengyo/l10n/app_localizations.dart';
 import 'package:sengyo/model/article.dart';
 import 'package:sengyo/repository/report_repository.dart';
 import 'package:sengyo/view/app_drawer.dart';
@@ -58,13 +59,16 @@ class PostListPage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             if (Provider.of<LoginBloc>(context, listen: false).isLogin) {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => SubmitFishScene()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SubmitFishScene()));
             } else {
               _showLoginDialog(context);
             }
           },
           child: Icon(Icons.edit),
-          backgroundColor: context.watch<LoginBloc>().isLogin ? AppColors.theme : Colors.grey,
+          backgroundColor: context.watch<LoginBloc>().isLogin
+              ? AppColors.theme
+              : Colors.grey,
         ),
         drawer: AppDrawer(),
         body: RefreshIndicator(
@@ -91,7 +95,7 @@ class PostListPage extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: Text(
-                          'みんなの捌いたメモ',
+                          AppLocalizations.of(context).title,
                           style: AppTextStyle.label,
                         ),
                       ),
@@ -136,8 +140,10 @@ class PostListPage extends StatelessWidget {
                               ),
                             );
                             if (needMute ?? false) {
-                              postListBloc.mute(postListBloc.articleList[index]);
-                              Toast.show('この投稿をミュートしました', context, duration: Toast.LENGTH_SHORT);
+                              postListBloc
+                                  .mute(postListBloc.articleList[index]);
+                              Toast.show('この投稿をミュートしました', context,
+                                  duration: Toast.LENGTH_SHORT);
                             }
                           },
                     child: PostListItem(
@@ -242,7 +248,8 @@ class PostListPage extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScene()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginScene()));
                   },
                   child: Text(
                     'ログイン',

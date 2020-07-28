@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sengyo/bloc/fish_list_bloc.dart';
 import 'package:sengyo/bloc/login_bloc.dart';
-import 'package:sengyo/view/postlist/post_list_scene.dart';
+import 'package:sengyo/l10n/app_localizations_delegate.dart';
 import 'package:sengyo/view/splash_page.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 
@@ -27,7 +28,7 @@ void main() {
         ),
       ],
       child: MyApp(),
-    )
+    ),
   );
 }
 
@@ -42,6 +43,15 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashPage(),
+      localizationsDelegates: [
+        const AppLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ja'),
+        Locale('en'),
+      ],
     );
   }
 }
