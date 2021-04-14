@@ -10,7 +10,7 @@ class FishListBloc extends ChangeNotifier {
   void init() {
     repository.withImageStream().listen((event) {
       fishDocumentList.clear();
-      fishDocumentList.addAll(event.documents);
+      fishDocumentList.addAll(event.docs);
       notifyListeners();
     });
   }

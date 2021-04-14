@@ -30,13 +30,13 @@ class Article {
       };
 
   factory Article.fromDocument(DocumentSnapshot document) => Article(
-        id: document.documentID,
-        fish: ArticleFish.fromMap(document.data['about_fish']),
-        cut: ArticleCut.fromMap(document.data['about_cut']),
-        cook: ArticleCook.fromMap(document.data['about_cook']),
-        isDraft: document.data['is_draft'],
-        createdAt: document.data['created_at'],
-        authorId: document.data['author_id'],
+        id: document.id,
+        fish: ArticleFish.fromMap(document.data()['about_fish']),
+        cut: ArticleCut.fromMap(document.data()['about_cut']),
+        cook: ArticleCook.fromMap(document.data()['about_cook']),
+        isDraft: document.data()['is_draft'],
+        createdAt: document.data()['created_at'],
+        authorId: document.data()['author_id'],
       );
 
   String get firstImagePath {

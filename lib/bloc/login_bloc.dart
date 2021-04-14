@@ -6,37 +6,33 @@ import 'package:package_info/package_info.dart';
 import 'package:sengyo/app_environment.dart';
 
 class LoginBloc extends ChangeNotifier {
-
   static const _storedEmailKey = 'firebase_email';
   final storage = new FlutterSecureStorage();
 
-  FirebaseUser _user;
+  User _user;
   bool get isLogin => _user != null;
 
-  FirebaseUser get user => _user;
-  set user(FirebaseUser value) {
+  User get user => _user;
+  set user(User value) {
     _user = value;
     notifyListeners();
   }
 
   Future<void> init() async {
-
-    final currentUser = await FirebaseAuth.instance.currentUser();
+    final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       user = currentUser;
     }
 
     FirebaseDynamicLinks.instance.onLink(
-      onSuccess: (PendingDynamicLinkData dynamicLink) async {
-        final deepLink = dynamicLink?.link.toString();
-        final email = await storage.read(key: _storedEmailKey);
-        await _authenticateWith(deepLink: deepLink, email: email);
-        await storage.delete(key: _storedEmailKey);
-      },
-      onError: (OnLinkErrorException e) async {
-        print(e.message);
-      }
-    );
+        onSuccess: (PendingDynamicLinkData dynamicLink) async {
+      final deepLink = dynamicLink?.link.toString();
+      final email = await storage.read(key: _storedEmailKey);
+      await _authenticateWith(deepLink: deepLink, email: email);
+      await storage.delete(key: _storedEmailKey);
+    }, onError: (OnLinkErrorException e) async {
+      print(e.message);
+    });
 
     final data = await FirebaseDynamicLinks.instance.getInitialLink();
     final deepLink = data?.link.toString();
@@ -47,13 +43,15 @@ class LoginBloc extends ChangeNotifier {
     }
   }
 
-  Future<void> _authenticateWith({@required String deepLink, @required String email}) async {
+  Future<void> _authenticateWith(
+      {@required String deepLink, @required String email}) async {
     if (deepLink != null) {
       try {
         // メールリンクかチェック
-        if (await FirebaseAuth.instance.isSignInWithEmailLink(deepLink)) {
-          await FirebaseAuth.instance.signInWithEmailAndLink(email: email, link: deepLink);
-          user = await FirebaseAuth.instance.currentUser();
+        if (FirebaseAuth.instance.isSignInWithEmailLink(deepLink)) {
+          await FirebaseAuth.instance
+              .signInWithEmailLink(email: email, emailLink: deepLink);
+          user = FirebaseAuth.instance.currentUser;
         }
       } catch (e) {
         debugPrint('Exception:' + e.message);
@@ -63,14 +61,16 @@ class LoginBloc extends ChangeNotifier {
 
   Future<void> sendLinkTo({@required String email}) async {
     final packageInfo = await PackageInfo.fromPlatform();
-    await FirebaseAuth.instance.sendSignInWithEmailLink(
+    await FirebaseAuth.instance.sendSignInLinkToEmail(
       email: email,
-      url: AppEnvironment.firebaseUrl,
-      handleCodeInApp: true,
-      iOSBundleID: packageInfo.packageName,
-      androidPackageName: packageInfo.packageName,
-      androidInstallIfNotAvailable: true,
-      androidMinimumVersion: '12'
+      actionCodeSettings: ActionCodeSettings(
+        url: AppEnvironment.firebaseUrl,
+        handleCodeInApp: true,
+        iOSBundleId: packageInfo.packageName,
+        androidPackageName: packageInfo.packageName,
+        androidInstallApp: true,
+        androidMinimumVersion: '12',
+      ),
     );
 
     await storage.write(key: _storedEmailKey, value: email);

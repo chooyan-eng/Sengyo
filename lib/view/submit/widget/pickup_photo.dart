@@ -21,16 +21,20 @@ class PickupPhoto extends StatelessWidget {
         width: double.infinity,
         height: 200,
         color: isProcessing ? AppColors.theme.shade50 : Colors.black12,
-        child: data == null ? Center(
-          child: isProcessing ? CircularProgressIndicator() : Icon(
-            Icons.add_a_photo,
-            color: Colors.black54,
-            size: 54,
-          ),
-        ) : Image.memory(
-          data,
-          fit: BoxFit.cover,
-        ),
+        child: data == null
+            ? Center(
+                child: isProcessing
+                    ? CircularProgressIndicator()
+                    : Icon(
+                        Icons.add_a_photo,
+                        color: Colors.black54,
+                        size: 54,
+                      ),
+              )
+            : Image.memory(
+                data,
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }

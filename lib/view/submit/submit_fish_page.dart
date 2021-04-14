@@ -7,7 +7,6 @@ import 'package:sengyo/view/submit/widget/multipleline_text_field.dart';
 import 'package:sengyo/view/submit/widget/pickup_photo.dart';
 import 'package:sengyo/view/submit/widget/singleline_text_field.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
-import 'package:toast/toast.dart';
 
 class SubmitFishPage extends StatelessWidget {
   @override
@@ -37,7 +36,8 @@ class SubmitFishPage extends StatelessWidget {
                         isRequired: true,
                         controller: submitFishBloc.nameController,
                         hint: 'マダイ',
-                        onChanged: (value) => submitFishBloc.callNotifyListeners(),
+                        onChanged: (value) =>
+                            submitFishBloc.callNotifyListeners(),
                       ),
                       const SizedBox(height: 16),
                       Text('手に入れた場所', style: AppTextStyle.label),
@@ -46,7 +46,8 @@ class SubmitFishPage extends StatelessWidget {
                         isRequired: true,
                         controller: submitFishBloc.placeController,
                         hint: '近所のスーパーで',
-                        onChanged: (value) => submitFishBloc.callNotifyListeners(),
+                        onChanged: (value) =>
+                            submitFishBloc.callNotifyListeners(),
                       ),
                       const SizedBox(height: 4),
                       Align(
@@ -87,17 +88,22 @@ class SubmitFishPage extends StatelessWidget {
                 const SizedBox(height: 32),
                 FormActions(
                   onBackTap: () => Navigator.pop(context),
-                  onForwardTap: submitFishBloc.isSubmittable && !submitFishBloc.isSubmitting ? () async {
-                    final document = await submitFishBloc.submit();
-                    submitFishBloc.document = document;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SubmitCutScene(document: document),
-                      ),
-                    );
-                    Toast.show('「食材について」を保存しました', context, duration: Toast.LENGTH_LONG);
-                  } : null,
+                  onForwardTap: submitFishBloc.isSubmittable &&
+                          !submitFishBloc.isSubmitting
+                      ? () async {
+                          final document = await submitFishBloc.submit();
+                          submitFishBloc.document = document;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  SubmitCutScene(document: document),
+                            ),
+                          );
+                          // TODO: (chooyan-eng) use ScaffoldMessenger.showSnackBar
+                          // Toast.show('「食材について」を保存しました', context, duration: Toast.LENGTH_LONG);
+                        }
+                      : null,
                   onPauseTap: () {},
                   forwardText: '捌き方に進む',
                   isSubmitting: submitFishBloc.isSubmitting,

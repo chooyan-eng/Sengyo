@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sengyo/l10n/app_localizations.dart';
 import 'package:sengyo/model/fish.dart';
 import 'package:sengyo/repository/image_file_repository.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
@@ -25,7 +26,7 @@ class PickupList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 16, left: 16),
             child: Text(
-              '最近投稿があった食材',
+              AppLocalizations.of(context).labelPickups,
               style: AppTextStyle.label,
             ),
           ),
@@ -38,20 +39,30 @@ class PickupList extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemCount: fishList.length,
               itemBuilder: (context, index) => Padding(
-                padding: EdgeInsets.only(top: 8, bottom: 16, left: 16, right: index == fishList.length - 1 ? 16 : 0),
+                padding: EdgeInsets.only(
+                    top: 8,
+                    bottom: 16,
+                    left: 16,
+                    right: index == fishList.length - 1 ? 16 : 0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: FutureBuilder<String>(
-                    future: ImageFileRepository.toDownloadUrl(fishList[index].imagePath),
-                    builder: (context, snapshot) => snapshot.hasData ? InkWell(
-                      onTap: () => onItemTap(fishList[index]),
-                      child: Image.network(
-                        snapshot.data,
-                        height: 40,
-                        width: 40,
-                        fit: BoxFit.fill,
-                      ),
-                    ) : Container(height: 40, width: 40, color: AppColors.theme.shade50),
+                    future: ImageFileRepository.toDownloadUrl(
+                        fishList[index].imagePath),
+                    builder: (context, snapshot) => snapshot.hasData
+                        ? InkWell(
+                            onTap: () => onItemTap(fishList[index]),
+                            child: Image.network(
+                              snapshot.data,
+                              height: 40,
+                              width: 40,
+                              fit: BoxFit.fill,
+                            ),
+                          )
+                        : Container(
+                            height: 40,
+                            width: 40,
+                            color: AppColors.theme.shade50),
                   ),
                 ),
               ),

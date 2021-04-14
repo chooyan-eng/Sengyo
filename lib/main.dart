@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
@@ -11,25 +12,28 @@ import 'bloc/article_list_bloc.dart';
 import 'bloc/cook_list_bloc.dart';
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<LoginBloc>(
-          create: (context) => LoginBloc(),
-        ),
-        ChangeNotifierProvider<FishListBloc>(
-          create: (context) => FishListBloc()..init(),
-        ),
-        ChangeNotifierProvider<CookListBloc>(
-          create: (context) => CookListBloc()..init(),
-        ),
-        ChangeNotifierProvider<ArticleListBloc>(
-          create: (context) => ArticleListBloc()..all(),
-        ),
-      ],
-      child: MyApp(),
-    ),
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp().then((_) {
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<LoginBloc>(
+            create: (context) => LoginBloc(),
+          ),
+          ChangeNotifierProvider<FishListBloc>(
+            create: (context) => FishListBloc()..init(),
+          ),
+          ChangeNotifierProvider<CookListBloc>(
+            create: (context) => CookListBloc()..init(),
+          ),
+          ChangeNotifierProvider<ArticleListBloc>(
+            create: (context) => ArticleListBloc()..all(),
+          ),
+        ],
+        child: MyApp(),
+      ),
+    );
+  });
 }
 
 class MyApp extends StatelessWidget {

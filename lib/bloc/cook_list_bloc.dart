@@ -10,7 +10,7 @@ class CookListBloc extends ChangeNotifier {
   void init() {
     repository.allStream().listen((event) {
       fishDocumentList.clear();
-      fishDocumentList.addAll(event.documents);
+      fishDocumentList.addAll(event.docs);
       notifyListeners();
     });
   }

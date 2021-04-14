@@ -1,18 +1,13 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image/image.dart' as image;
 import 'package:sengyo/model/article.dart';
 import 'package:sengyo/model/cook.dart';
 import 'package:sengyo/repository/article_repository.dart';
 import 'package:sengyo/repository/cook_repository.dart';
 import 'package:sengyo/repository/image_file_repository.dart';
 
-class SubmitCookBloc extends ChangeNotifier{
-
+class SubmitCookBloc extends ChangeNotifier {
   final articleRepository = ArticleRepository();
   final cookRepository = CookRepository();
   final imageRepository = ImageFileRepository();
@@ -25,9 +20,10 @@ class SubmitCookBloc extends ChangeNotifier{
   List<int> cookImageData;
   bool _isProcessingImage = false;
   bool _isSubmitting = false;
-  bool get isSubmittable => _document != null 
-                              && !_isProcessingImage
-                              && nameController.text.isNotEmpty;
+  bool get isSubmittable =>
+      _document != null &&
+      !_isProcessingImage &&
+      nameController.text.isNotEmpty;
 
   void updateCookList(List<DocumentSnapshot> documents) {
     _cookList.clear();
@@ -45,7 +41,7 @@ class SubmitCookBloc extends ChangeNotifier{
     _isProcessingImage = value;
     notifyListeners();
   }
-  
+
   bool get isSubmitting => _isSubmitting;
   set isSubmitting(bool value) {
     _isSubmitting = value;
@@ -61,15 +57,18 @@ class SubmitCookBloc extends ChangeNotifier{
 
     isProcessingImage = true;
 
-    ImageCrop.sampleImage(
-      file: File(imageFile.path),
-      preferredSize: 512,
-    ).then((sampleFile) {
-      cookImageData = image.encodePng(image.decodeImage(sampleFile.readAsBytesSync()));
-      
-      isProcessingImage = false;
-      notifyListeners();
-    });
+    cookImageData = await imageFile.readAsBytes();
+    isProcessingImage = false;
+
+    // ImageCrop.sampleImage(
+    //   file: File(imageFile.path),
+    //   preferredSize: 512,
+    // ).then((sampleFile) {
+    //   cookImageData = image.encodePng(image.decodeImage(sampleFile.readAsBytesSync()));
+
+    //   isProcessingImage = false;
+    //   notifyListeners();
+    // });
   }
 
   Future<DocumentReference> submit() async {
@@ -79,12 +78,13 @@ class SubmitCookBloc extends ChangeNotifier{
 
     String imagePath;
     if (cookImageData?.isNotEmpty ?? false) {
-      final onComplete = await imageRepository.uploadCookImage(cookImageData).onComplete;
-      imagePath = await onComplete.ref.getPath();
+      imageRepository.uploadCookImage(cookImageData).then((snapshot) {
+        imagePath = snapshot.ref.fullPath;
+      });
     }
 
     var cook = _cookList.firstWhere((element) {
-      return element.data['name'] == nameController.text;
+      return element.data()['name'] == nameController.text;
     }, orElse: () => null)?.reference;
 
     final cookSnapshot = await cook?.get();
@@ -92,7 +92,7 @@ class SubmitCookBloc extends ChangeNotifier{
       cook = await cookRepository.send(
         Cook(nameController.text, imagePath),
       );
-    } else if (cookSnapshot.data['image'] == null) {
+    } else if (cookSnapshot.data()['image'] == null) {
       cook = await cookRepository.send(
         Cook(nameController.text, imagePath),
         document: cook,
@@ -103,7 +103,7 @@ class SubmitCookBloc extends ChangeNotifier{
       cook,
       [
         Memo(
-          memoController.text, 
+          memoController.text,
           imagePath,
         ),
       ],
@@ -123,5 +123,5 @@ class SubmitCookBloc extends ChangeNotifier{
     nameController.dispose();
     memoController.dispose();
     super.dispose();
-  }  
+  }
 }

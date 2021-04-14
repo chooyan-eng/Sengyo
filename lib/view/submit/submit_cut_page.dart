@@ -6,7 +6,6 @@ import 'package:sengyo/view/submit/widget/form_actions.dart';
 import 'package:sengyo/view/submit/widget/multipleline_text_field.dart';
 import 'package:sengyo/view/submit/widget/pickup_photo.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
-import 'package:toast/toast.dart';
 
 class SubmitCutPage extends StatelessWidget {
   @override
@@ -31,12 +30,12 @@ class SubmitCutPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        '注意すること', 
+                        '注意すること',
                         style: AppTextStyle.label,
                       ),
                       const SizedBox(height: 8),
                       MultipleLineTextField(
-                        isRequired: false, 
+                        isRequired: false,
                         controller: submitCutBloc.cautionController,
                         hint: '「トゲが鋭い」「毒がある」「寄生虫が入りやすい」など、捌いて食べる上で注意すべき点',
                       ),
@@ -52,7 +51,7 @@ class SubmitCutPage extends StatelessWidget {
                       Text('メモ', style: AppTextStyle.label),
                       const SizedBox(height: 8),
                       MultipleLineTextField(
-                        isRequired: false, 
+                        isRequired: false,
                         controller: submitCutBloc.memoController,
                         hint: '捌いた時の様子を詳しく教えてください',
                       ),
@@ -68,11 +67,19 @@ class SubmitCutPage extends StatelessWidget {
                 const SizedBox(height: 32),
                 FormActions(
                   onBackTap: () => Navigator.pop(context),
-                  onForwardTap: submitCutBloc.isSubmittable && !submitCutBloc.isSubmitting ? () async {
-                    final document = await submitCutBloc.submit();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitCookScene(document: document)));
-                    Toast.show('「捌き方について」を保存しました', context, duration: Toast.LENGTH_LONG);
-                  } : null,
+                  onForwardTap:
+                      submitCutBloc.isSubmittable && !submitCutBloc.isSubmitting
+                          ? () async {
+                              final document = await submitCutBloc.submit();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SubmitCookScene(document: document)));
+                              // TODO: (chooyan-eng) use ScaffoldMessenger.showSnackBar
+                              // Toast.show('「捌き方について」を保存しました', context, duration: Toast.LENGTH_LONG);
+                            }
+                          : null,
                   onPauseTap: () {},
                   forwardText: '食べ方に進む',
                   isSubmitting: submitCutBloc.isSubmitting,

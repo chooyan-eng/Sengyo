@@ -22,7 +22,7 @@ class ArticleListBloc extends ChangeNotifier {
     _subscription?.cancel();
     _subscription = stream.listen((event) {
       articleList.clear();
-      articleList.addAll(event.documents);
+      articleList.addAll(event.docs);
       notifyListeners();
     });
   }

@@ -1,16 +1,11 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image/image.dart' as image;
 import 'package:sengyo/model/article.dart';
 import 'package:sengyo/repository/article_repository.dart';
 import 'package:sengyo/repository/image_file_repository.dart';
 
-class SubmitCutBloc extends ChangeNotifier{
-
+class SubmitCutBloc extends ChangeNotifier {
   final articleRepository = ArticleRepository();
   final imageRepository = ImageFileRepository();
 
@@ -33,7 +28,7 @@ class SubmitCutBloc extends ChangeNotifier{
     _isProcessingImage = value;
     notifyListeners();
   }
-  
+
   bool get isSubmitting => _isSubmitting;
   set isSubmitting(bool value) {
     _isSubmitting = value;
@@ -49,15 +44,18 @@ class SubmitCutBloc extends ChangeNotifier{
 
     isProcessingImage = true;
 
-    ImageCrop.sampleImage(
-      file: File(imageFile.path),
-      preferredSize: 512,
-    ).then((sampleFile) {
-      cutImageData = image.encodePng(image.decodeImage(sampleFile.readAsBytesSync()));
-      
-      isProcessingImage = false;
-      notifyListeners();
-    });
+    cutImageData = await imageFile.readAsBytes();
+    isProcessingImage = false;
+
+    // ImageCrop.sampleImage(
+    //   file: File(imageFile.path),
+    //   preferredSize: 512,
+    // ).then((sampleFile) {
+    //   cutImageData = image.encodePng(image.decodeImage(sampleFile.readAsBytesSync()));
+
+    //   isProcessingImage = false;
+    //   notifyListeners();
+    // });
   }
 
   Future<DocumentReference> submit() async {
@@ -66,23 +64,25 @@ class SubmitCutBloc extends ChangeNotifier{
 
     String imagePath;
     if (cutImageData?.isNotEmpty ?? false) {
-      final onComplete = await imageRepository.uploadCutImage(cutImageData).onComplete;
-      imagePath = await onComplete.ref.getPath();
+      imageRepository.uploadCutImage(cutImageData).then((snapshot) {
+        imagePath = snapshot.ref.fullPath;
+      });
     }
 
     article.cut = ArticleCut(
       cautionController.text,
       [
         Memo(
-          memoController.text, 
+          memoController.text,
           imagePath,
         ),
       ],
     );
 
-    final reference = await articleRepository.send(article, document: _document);
+    final reference =
+        await articleRepository.send(article, document: _document);
     isSubmitting = false;
-    return reference; 
+    return reference;
   }
 
   void callNotifyListeners() => notifyListeners();
@@ -92,5 +92,5 @@ class SubmitCutBloc extends ChangeNotifier{
     cautionController.dispose();
     memoController.dispose();
     super.dispose();
-  }  
+  }
 }

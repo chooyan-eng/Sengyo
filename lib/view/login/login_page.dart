@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:sengyo/bloc/login_bloc.dart';
 import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
-import 'package:toast/toast.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,9 +10,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   final controller = TextEditingController();
-  
+
   bool _isSending = false;
 
   @override
@@ -86,20 +84,24 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 60),
                   RaisedButton(
-                    onPressed: _isSending ? null : () async {
-                      setState(() {
-                        _isSending = true;
-                      });
+                    onPressed: _isSending
+                        ? null
+                        : () async {
+                            setState(() {
+                              _isSending = true;
+                            });
 
-                      await Provider.of<LoginBloc>(context, listen: false).sendLinkTo(email: controller.text);
+                            await Provider.of<LoginBloc>(context, listen: false)
+                                .sendLinkTo(email: controller.text);
 
-                      setState(() {
-                        _isSending = false;
-                      });
+                            setState(() {
+                              _isSending = false;
+                            });
 
-                      Toast.show('ログイン用メールを送信しました。', context);
-                      Navigator.pop(context);
-                    },
+                            // TODO: (chooyan-eng) use ScaffoldMessenger.showSnackBar
+                            // Toast.show('ログイン用メールを送信しました。', context);
+                            Navigator.pop(context);
+                          },
                     padding: const EdgeInsets.all(0.0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
@@ -113,32 +115,29 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(24),
                       ),
                       child: Center(
-                        child: _isSending ? CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Colors.white),
-                        ) : Text(
-                          'メールを送信',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: _isSending
+                            ? CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation(Colors.white),
+                              )
+                            : Text(
+                                'メールを送信',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 32),
                   Text(
                     '※ パスワードは必要ありません。',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: AppColors.theme
-                    ),
+                    style: TextStyle(fontSize: 12.0, color: AppColors.theme),
                   ),
                   Text(
                     '※ メーラーにより迷惑メールフォルダに振り分けられる場合があります。迷惑メールフォルダもご確認ください。',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: AppColors.theme
-                    ),
+                    style: TextStyle(fontSize: 12.0, color: AppColors.theme),
                   ),
                   const SizedBox(height: 60),
                 ],

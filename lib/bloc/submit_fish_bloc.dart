@@ -1,18 +1,13 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image/image.dart' as image;
 import 'package:sengyo/model/article.dart';
 import 'package:sengyo/model/fish.dart';
 import 'package:sengyo/repository/article_repository.dart';
 import 'package:sengyo/repository/fish_repository.dart';
 import 'package:sengyo/repository/image_file_repository.dart';
 
-class SubmitFishBloc extends ChangeNotifier{
-
+class SubmitFishBloc extends ChangeNotifier {
   final articleRepository = ArticleRepository();
   final fishRepository = FishRepository();
   final imageRepository = ImageFileRepository();
@@ -27,9 +22,10 @@ class SubmitFishBloc extends ChangeNotifier{
   List<int> fishImageData;
   bool _isProcessingImage = false;
   bool _isSubmitting = false;
-  bool get isSubmittable => !_isProcessingImage
-                              && nameController.text.isNotEmpty
-                              && placeController.text.isNotEmpty;
+  bool get isSubmittable =>
+      !_isProcessingImage &&
+      nameController.text.isNotEmpty &&
+      placeController.text.isNotEmpty;
 
   void updateFishList(List<DocumentSnapshot> documents) {
     _fishList.clear();
@@ -47,7 +43,7 @@ class SubmitFishBloc extends ChangeNotifier{
     _isProcessingImage = value;
     notifyListeners();
   }
-  
+
   bool get isSubmitting => _isSubmitting;
   set isSubmitting(bool value) {
     _isSubmitting = value;
@@ -63,28 +59,32 @@ class SubmitFishBloc extends ChangeNotifier{
     fishImageData = null;
     isProcessingImage = true;
 
-    ImageCrop.sampleImage(
-      file: File(imageFile.path),
-      preferredSize: 512,
-    ).then((sampleFile) {
-      fishImageData = image.encodePng(image.decodeImage(sampleFile.readAsBytesSync()));
-      
-      isProcessingImage = false;
-      notifyListeners();
-    });
+    fishImageData = await imageFile.readAsBytes();
+    isProcessingImage = false;
+    // ImageCrop.sampleImage(
+    //   file: File(imageFile.path),
+    //   preferredSize: 512,
+    // ).then((sampleFile) {
+    //   fishImageData =
+    //       image.encodePng(image.decodeImage(sampleFile.readAsBytesSync()));
+
+    //   isProcessingImage = false;
+    //   notifyListeners();
+    // });
   }
 
   Future<DocumentReference> submit() async {
     isSubmitting = true;
-    
+
     String imagePath;
     if (fishImageData?.isNotEmpty ?? false) {
-      final onComplete = await imageRepository.uploadFishImage(fishImageData).onComplete;
-      imagePath = await onComplete.ref.getPath();
+      await imageRepository.uploadFishImage(fishImageData).then((snapshot) {
+        imagePath = snapshot.ref.fullPath;
+      });
     }
 
     var fish = _fishList.firstWhere((element) {
-      return element.data['synonyms'].contains(nameController.text);
+      return element.data()['synonyms'].contains(nameController.text);
     }, orElse: () => null)?.reference;
 
     final fishSnapshot = await fish?.get();
@@ -92,7 +92,7 @@ class SubmitFishBloc extends ChangeNotifier{
       fish = await fishRepository.send(
         Fish(nameController.text, imagePath, [nameController.text]),
       );
-    } else if (fishSnapshot.data['image'] == null) {
+    } else if (fishSnapshot.data()['image'] == null) {
       fish = await fishRepository.send(
         Fish(nameController.text, imagePath, [nameController.text]),
         document: fish,
@@ -105,7 +105,7 @@ class SubmitFishBloc extends ChangeNotifier{
         placeController.text,
         [
           Memo(
-            memoController.text, 
+            memoController.text,
             imagePath,
           ),
         ],
@@ -114,9 +114,9 @@ class SubmitFishBloc extends ChangeNotifier{
       authorId: authorId,
     );
 
-    final reference =  await articleRepository.send(article, document: document);
+    final reference = await articleRepository.send(article, document: document);
     isSubmitting = false;
-    return reference; 
+    return reference;
   }
 
   void callNotifyListeners() => notifyListeners();
@@ -127,5 +127,5 @@ class SubmitFishBloc extends ChangeNotifier{
     placeController.dispose();
     memoController.dispose();
     super.dispose();
-  }  
+  }
 }

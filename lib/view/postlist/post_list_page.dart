@@ -16,7 +16,6 @@ import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
 import 'package:sengyo/view/widget/post_action_sheet.dart';
 import 'package:sengyo/view/widget/report_dialog.dart';
-import 'package:toast/toast.dart';
 
 class PostListPage extends StatelessWidget {
   @override
@@ -95,7 +94,7 @@ class PostListPage extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: Text(
-                          AppLocalizations.of(context).title,
+                          AppLocalizations.of(context).labelPosts,
                           style: AppTextStyle.label,
                         ),
                       ),
@@ -142,8 +141,9 @@ class PostListPage extends StatelessWidget {
                             if (needMute ?? false) {
                               postListBloc
                                   .mute(postListBloc.articleList[index]);
-                              Toast.show('この投稿をミュートしました', context,
-                                  duration: Toast.LENGTH_SHORT);
+                              // TODO: (chooyan-eng) use ScaffoldMessenger.showSnackBar
+                              // Toast.show('この投稿をミュートしました', context,
+                              //     duration: Toast.LENGTH_SHORT);
                             }
                           },
                     child: PostListItem(
@@ -181,11 +181,13 @@ class PostListPage extends StatelessWidget {
           final bloc = Provider.of<PostListBloc>(context, listen: false);
           if (bloc.muteList.contains(article.id)) {
             bloc.unmute(article);
-            Toast.show('この投稿のミュートを解除しました', context,
-                duration: Toast.LENGTH_SHORT);
+            // TODO: (chooyan-eng) use ScaffoldMessenger.showSnackBar
+            // Toast.show('この投稿のミュートを解除しました', context,
+            //     duration: Toast.LENGTH_SHORT);
           } else {
             bloc.mute(article);
-            Toast.show('この投稿をミュートしました', context, duration: Toast.LENGTH_SHORT);
+            // TODO: (chooyan-eng) use ScaffoldMessenger.showSnackBar
+            // Toast.show('この投稿をミュートしました', context, duration: Toast.LENGTH_SHORT);
           }
         },
         onReportTap: (value) {
@@ -204,7 +206,8 @@ class PostListPage extends StatelessWidget {
         article: article,
         onReport: (message) async {
           await ReportRepository().send(article, message);
-          Toast.show('問題を報告しました', context, duration: Toast.LENGTH_SHORT);
+          // TODO: (chooyan-eng) use ScaffoldMessenger.showSnackBar
+          // Toast.show('問題を報告しました', context, duration: Toast.LENGTH_SHORT);
           Navigator.pop(context);
         },
         onCancel: () => Navigator.pop(context),

@@ -6,7 +6,6 @@ import 'package:sengyo/view/submit/widget/multipleline_text_field.dart';
 import 'package:sengyo/view/submit/widget/pickup_photo.dart';
 import 'package:sengyo/view/submit/widget/singleline_text_field.dart';
 import 'package:sengyo/view/widget/app_text_style.dart';
-import 'package:toast/toast.dart';
 
 class SubmitCookPage extends StatelessWidget {
   @override
@@ -36,7 +35,8 @@ class SubmitCookPage extends StatelessWidget {
                         isRequired: true,
                         controller: submitCookBloc.nameController,
                         hint: '刺身',
-                        onChanged: (value) => submitCookBloc.callNotifyListeners(),
+                        onChanged: (value) =>
+                            submitCookBloc.callNotifyListeners(),
                       ),
                       const SizedBox(height: 16),
                     ],
@@ -66,11 +66,16 @@ class SubmitCookPage extends StatelessWidget {
                 const SizedBox(height: 32),
                 FormActions(
                   onBackTap: () => Navigator.pop(context),
-                  onForwardTap: submitCookBloc.isSubmittable && !submitCookBloc.isSubmitting ? () async {
-                    await submitCookBloc.submit();
-                    Navigator.popUntil(context, (route) => !route.navigator.canPop());
-                    Toast.show('投稿が完了しました', context, duration: Toast.LENGTH_LONG);
-                  } : null,
+                  onForwardTap: submitCookBloc.isSubmittable &&
+                          !submitCookBloc.isSubmitting
+                      ? () async {
+                          await submitCookBloc.submit();
+                          Navigator.popUntil(
+                              context, (route) => !route.navigator.canPop());
+                          // TODO: (chooyan-eng) use ScaffoldMessenger.showSnackBar
+                          // Toast.show('投稿が完了しました', context, duration: Toast.LENGTH_LONG);
+                        }
+                      : null,
                   onPauseTap: () {},
                   forwardText: '投稿して公開する',
                   isLastForm: true,

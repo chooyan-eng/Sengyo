@@ -2,28 +2,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sengyo/model/article.dart';
 
 class ArticleRepository {
-
   static const collectionName = 'articles';
 
-  Future<DocumentReference> send(Article article, {DocumentReference document}) async {
+  Future<DocumentReference> send(Article article,
+      {DocumentReference document}) async {
     if (document == null) {
-      document = Firestore.instance.collection(collectionName).document();
+      document = FirebaseFirestore.instance.collection(collectionName).doc();
     }
 
-    await document.setData(article.firestoreData);
+    await document.set(article.firestoreData);
     return document;
   }
 
   Stream<QuerySnapshot> allPublishedStream() {
-    return Firestore.instance.collection(collectionName)
-      .where('is_draft', isEqualTo: false)
-      .snapshots();
+    return FirebaseFirestore.instance
+        .collection(collectionName)
+        .where('is_draft', isEqualTo: false)
+        .snapshots();
   }
 
   Stream<QuerySnapshot> filterByFishStream(DocumentReference fish) {
-    return Firestore.instance.collection(collectionName)
-      .where('is_draft', isEqualTo: false)
-      .where('fish', isEqualTo: fish)
-      .snapshots();
+    return FirebaseFirestore.instance
+        .collection(collectionName)
+        .where('is_draft', isEqualTo: false)
+        .where('fish', isEqualTo: fish)
+        .snapshots();
   }
 }

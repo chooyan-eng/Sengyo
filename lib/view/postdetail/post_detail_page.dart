@@ -12,7 +12,6 @@ import 'package:sengyo/view/widget/app_colors.dart';
 import 'package:sengyo/view/widget/fixed_size_image.dart';
 import 'package:sengyo/view/widget/post_action_sheet.dart';
 import 'package:sengyo/view/widget/report_dialog.dart';
-import 'package:toast/toast.dart';
 
 class PostDetailPage extends StatelessWidget {
   @override
@@ -27,7 +26,8 @@ class PostDetailPage extends StatelessWidget {
             InkWell(
               onTap: () => _showMenuSheet(context, postDetailBloc.article),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 child: Icon(Icons.more_vert),
               ),
             ),
@@ -45,11 +45,15 @@ class PostDetailPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: FutureBuilder<Fish>(
-                      future: Fish.fromReference(postDetailBloc.article.fish.fish),
+                      future:
+                          Fish.fromReference(postDetailBloc.article.fish.fish),
                       builder: (context, fishSnapshot) => FutureBuilder<Cook>(
-                        future: Cook.fromReference(postDetailBloc.article.cook.cook),
+                        future: Cook.fromReference(
+                            postDetailBloc.article.cook.cook),
                         builder: (context, cookSnapshot) => Text(
-                          fishSnapshot.hasData && cookSnapshot.hasData ? '${fishSnapshot.data.name} の ${cookSnapshot.data.name}' : '',
+                          fishSnapshot.hasData && cookSnapshot.hasData
+                              ? '${fishSnapshot.data.name} の ${cookSnapshot.data.name}'
+                              : '',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -65,8 +69,10 @@ class PostDetailPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Align(
                   alignment: Alignment.centerRight,
-                    child: Text(
-                    DateTime.fromMillisecondsSinceEpoch(postDetailBloc.article.createdAt.millisecondsSinceEpoch).toString(),
+                  child: Text(
+                    DateTime.fromMillisecondsSinceEpoch(postDetailBloc
+                            .article.createdAt.millisecondsSinceEpoch)
+                        .toString(),
                     style: TextStyle(fontSize: 16, color: Colors.black54),
                   ),
                 ),
@@ -101,82 +107,105 @@ class PostDetailPage extends StatelessWidget {
                 ),
               ),
               ...postDetailBloc.article.fish.memoList.expand((memo) => [
-                SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    memo.memo,
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 18,
+                    SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        memo.memo,
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                memo.imagePath == null ? SizedBox.shrink() : SizedBox(height: 16),
-                memo.imagePath == null ? SizedBox.shrink() : FutureBuilder(
-                  future: ImageFileRepository.toDownloadUrl(memo.imagePath),
-                  builder: (context, snapshot) => snapshot.hasData ? Container(
-                    width: double.infinity,
-                    child: Image.network(snapshot.data),
-                  ) : SizedBox.shrink(),
-                ),
-              ]),
+                    memo.imagePath == null
+                        ? SizedBox.shrink()
+                        : SizedBox(height: 16),
+                    memo.imagePath == null
+                        ? SizedBox.shrink()
+                        : FutureBuilder(
+                            future: ImageFileRepository.toDownloadUrl(
+                                memo.imagePath),
+                            builder: (context, snapshot) => snapshot.hasData
+                                ? Container(
+                                    width: double.infinity,
+                                    child: Image.network(snapshot.data),
+                                  )
+                                : SizedBox.shrink(),
+                          ),
+                  ]),
               SizedBox(height: 60),
               DetailLabel(
                 label: '捌き方',
                 iconFileName: 'handyman.png',
               ),
-              ... postDetailBloc.article.cut.caution?.isNotEmpty ?? false ? [
-                SizedBox(height: 16),
-                DetailCaution(caution: postDetailBloc.article.cut.caution)
-              ] : [],
+              ...postDetailBloc.article.cut.caution?.isNotEmpty ?? false
+                  ? [
+                      SizedBox(height: 16),
+                      DetailCaution(caution: postDetailBloc.article.cut.caution)
+                    ]
+                  : [],
               ...postDetailBloc.article.cut.memoList.expand((memo) => [
-                SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    memo.memo,
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 18,
+                    SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        memo.memo,
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                memo.imagePath == null ? SizedBox.shrink() : SizedBox(height: 16),
-                memo.imagePath == null ? SizedBox.shrink() : FutureBuilder(
-                  future: ImageFileRepository.toDownloadUrl(memo.imagePath),
-                  builder: (context, snapshot) => snapshot.hasData ? Container(
-                    width: double.infinity,
-                    child: Image.network(snapshot.data),
-                  ) : SizedBox.shrink(),
-                ),
-              ]),
+                    memo.imagePath == null
+                        ? SizedBox.shrink()
+                        : SizedBox(height: 16),
+                    memo.imagePath == null
+                        ? SizedBox.shrink()
+                        : FutureBuilder(
+                            future: ImageFileRepository.toDownloadUrl(
+                                memo.imagePath),
+                            builder: (context, snapshot) => snapshot.hasData
+                                ? Container(
+                                    width: double.infinity,
+                                    child: Image.network(snapshot.data),
+                                  )
+                                : SizedBox.shrink(),
+                          ),
+                  ]),
               SizedBox(height: 60),
               DetailLabel(
                 label: '食べ方',
                 iconFileName: 'sports_bar.png',
               ),
               ...postDetailBloc.article.cook.memoList.expand((memo) => [
-                SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    memo.memo,
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 18,
+                    SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        memo.memo,
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                memo.imagePath == null ? SizedBox.shrink() : SizedBox(height: 16),
-                memo.imagePath == null ? SizedBox.shrink() : FutureBuilder(
-                  future: ImageFileRepository.toDownloadUrl(memo.imagePath),
-                  builder: (context, snapshot) => snapshot.hasData ? Container(
-                    width: double.infinity,
-                    child: Image.network(snapshot.data),
-                  ) : SizedBox.shrink(),
-                ),
-              ]),
+                    memo.imagePath == null
+                        ? SizedBox.shrink()
+                        : SizedBox(height: 16),
+                    memo.imagePath == null
+                        ? SizedBox.shrink()
+                        : FutureBuilder(
+                            future: ImageFileRepository.toDownloadUrl(
+                                memo.imagePath),
+                            builder: (context, snapshot) => snapshot.hasData
+                                ? Container(
+                                    width: double.infinity,
+                                    child: Image.network(snapshot.data),
+                                  )
+                                : SizedBox.shrink(),
+                          ),
+                  ]),
               SizedBox(height: 60),
             ],
           ),
@@ -184,7 +213,7 @@ class PostDetailPage extends StatelessWidget {
       ),
     );
   }
-  
+
   _showMenuSheet(BuildContext context, Article article) {
     showModalBottomSheet(
       context: context,
@@ -211,7 +240,8 @@ class PostDetailPage extends StatelessWidget {
         article: article,
         onReport: (message) async {
           await ReportRepository().send(article, message);
-          Toast.show('問題を報告しました', context, duration: Toast.LENGTH_SHORT);
+          // TODO: (chooyan-eng) use ScaffoldMessenger.showSnackBar
+          // Toast.show('問題を報告しました', context, duration: Toast.LENGTH_SHORT);
           Navigator.pop(context);
         },
         onCancel: () => Navigator.pop(context),

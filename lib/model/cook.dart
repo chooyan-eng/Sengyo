@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sengyo/model/fish.dart';
 
 class Cook {
   final String name;
@@ -8,14 +7,14 @@ class Cook {
   Cook(this.name, this.image);
 
   Map<String, dynamic> get firestoreData => {
-    'name': name,
-    'image': image,
-  };
+        'name': name,
+        'image': image,
+      };
 
   factory Cook.fromDocument(DocumentSnapshot document) => Cook(
-    document.data['name'],
-    document.data['image'],
-  );
+        document.data()['name'],
+        document.data()['image'],
+      );
 
   static Future<Cook> fromReference(DocumentReference reference) async {
     final snapshot = await reference.get();
